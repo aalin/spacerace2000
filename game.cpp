@@ -3,8 +3,15 @@
 #include "gameplay.hpp"
 
 Game::Game(int width, int height, Game::WindowMode::Mode window_mode) {
+
 	if(!glfwInit())
 		throw "GLFW could not be initialized.";
+
+	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
+	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
+
+	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
 
 	if(!glfwOpenWindow(width, height, 0, 0, 0, 0, 16, 0, window_mode))
 		throw "GLFW window could not be opened.";
@@ -15,7 +22,7 @@ Game::~Game() {
 	glfwTerminate();
 }
 
-int Game::run() {
+void Game::run() {
 	_running = true;
 
 	double last_time = glfwGetTime();

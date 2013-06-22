@@ -18,7 +18,7 @@ class Game {
 		Game(int width, int height, WindowMode::Mode);
 		~Game();
 
-		int run();
+		void run();
 
 		void pushState(GameState* state);
 

@@ -1,4 +1,4 @@
-FILES = main game game_state gameplay framebuffer
+FILES = main game game_state gameplay framebuffer shader
 OBJS = $(addsuffix .o, $(FILES))
 
 CC=clang

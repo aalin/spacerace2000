@@ -1,5 +1,5 @@
 #include "framebuffer.hpp"
-#include <OpenGL/gl.h>
+#include "opengl.hpp"
 
 Framebuffer::Framebuffer(unsigned int width, unsigned int height) {
 	// Setup texture
