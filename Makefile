@@ -1,10 +1,10 @@
-FILES = main game game_state gameplay framebuffer shader
+FILES = main game game_state gameplay framebuffer shader opengl
 OBJS = $(addsuffix .o, $(FILES))
 
 CC=clang
 CFLAGS=-Wall -Wextra -ggdb -std=c++0x -stdlib=libstdc++
 
-LFLAGS=-framework OpenGL -lglfw -lstdc++
+LFLAGS=-framework OpenGL -lglfw -lglew -lstdc++
 CFLAGS+=-I/usr/X11/include/
 
 %.o: %.cpp %.hpp

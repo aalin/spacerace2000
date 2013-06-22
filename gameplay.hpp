@@ -17,8 +17,9 @@ class Gameplay : public GameState {
 
 	private:
 		Shader* _lighting_shader;
-		GLint _mpv_location;
-		GLuint _vertex_buffer;
+		GLuint _mpv_location;
+		GLuint _vertex_buffer_id;
+		GLuint _vertex_array_id;
 };
 
 #endif

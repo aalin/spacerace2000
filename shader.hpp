@@ -16,8 +16,7 @@ class Shader {
 			return num_uniforms;
 		}
 
-		GLint uniformLocation(std::string name)
-		{
+		GLint uniformLocation(std::string name) {
 			return glGetUniformLocation(_program, name.c_str());
 		}
 

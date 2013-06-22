@@ -13,8 +13,19 @@ Game::Game(int width, int height, Game::WindowMode::Mode window_mode) {
 	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
 
+	glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
+
 	if(!glfwOpenWindow(width, height, 0, 0, 0, 0, 16, 0, window_mode))
 		throw "GLFW window could not be opened.";
+
+	glPrintErrors();
+	glewExperimental = GL_TRUE;
+	int glew_status = glewInit();
+	glPrintErrors();
+	if(glew_status != GLEW_OK) {
+		std::cerr << "GLEW error: " << glewGetErrorString(glew_status) << std::endl;
+		throw("GLEW could not be initialized.");
+	}
 }
 
 Game::~Game() {
@@ -37,7 +48,7 @@ void Game::run() {
 
 		last_time = current_time;
 
-		glfwSleep(100);
+		glfwSleep(0.1);
 	}
 }
 
@@ -49,6 +60,7 @@ void Game::update(double s) {
 void Game::draw() {
 	if(!_states.empty())
 		_states.top()->draw();
+	glfwSwapBuffers();
 }
 
 void Game::pushState(GameState* state) {

@@ -1,9 +1,8 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include <GL/glfw.h>
+#include "opengl.hpp"
 #include <stack>
-
 #include "game_state.hpp"
 
 class Game {
