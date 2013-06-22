@@ -16,7 +16,7 @@ class Gameplay : public GameState {
 		void draw();
 
 	private:
-		Shader* _lighting_shader;
+		Shader* _shader;
 		GLuint _mpv_location;
 		GLuint _vertex_buffer_id;
 		GLuint _vertex_array_id;

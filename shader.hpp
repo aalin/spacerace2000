@@ -20,6 +20,10 @@ class Shader {
 			return glGetUniformLocation(_program, name.c_str());
 		}
 
+		GLint attribLocation(std::string name) {
+			return glGetAttribLocation(_program, name.c_str());
+		}
+
 	private:
 		GLuint _vertex_shader;
 		GLuint _fragment_shader;
