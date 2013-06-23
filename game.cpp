@@ -48,7 +48,7 @@ void Game::run() {
 
 		last_time = current_time;
 
-		glfwSleep(0.1);
+		glfwSleep(0.001);
 	}
 }
 

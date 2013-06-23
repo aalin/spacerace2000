@@ -21,11 +21,19 @@ Gameplay::~Gameplay() {
 
 void Gameplay::setup() {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
-	// glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 
 	_shader = new Shader("shaders/lighting");
 	_shader->use();
-	_mvp_location = _shader->uniformLocation("MVP");
+	_model_view_projection_matrix_location = _shader->uniformLocation("ModelViewProjectionMatrix");
+	_model_view_matrix_location = _shader->uniformLocation("ModelViewMatrix");
+	_normal_matrix_location = _shader->uniformLocation("NormalMatrix");
+
+	glUniform4f(_shader->uniformLocation("ambientMat"), 0.2, 0.2, 0.2, 1.0);
+	glUniform4f(_shader->uniformLocation("diffuseMat"), 0.8, 0.8, 0.8, 1.0);
+	glUniform4f(_shader->uniformLocation("specMat"), 0.8, 0.8, 0.8, 1.0);
+	glUniform1f(_shader->uniformLocation("specPow"), 80.0);
+	glUniform3f(_shader->uniformLocation("lightPosition"), 0.0, 0.0, 100.0);
 
 	std::vector<glm::vec3> track_points;
 	track_points.push_back(glm::vec3(-783.13, 0.00, 0.00));
@@ -97,17 +105,22 @@ void Gameplay::draw() {
 
 	glm::mat4 projection_matrix = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 5000.0f);
 
+	float x = glfwGetTime();
 	glm::mat4 view_matrix = glm::lookAt(
-		glm::vec3(400.0, 400.0, 300.0), // Camera position
+		glm::vec3(std::cos(x / 10.0) * 500.0, std::sin(x / 10.0) * 500.0, 300.0), // Camera position
 		glm::vec3(0.0, 0.0, 100.0), // Look at
 		glm::vec3(0.0, 0.0, 1.0)
 	);
 
 	glm::mat4 model_matrix(1.0);
 
-	glm::mat4 mvp = projection_matrix * view_matrix * model_matrix;
+	glm::mat4 model_view_matrix = view_matrix * model_matrix;
+	glm::mat4 model_view_projection_matrix = projection_matrix * view_matrix * model_matrix;
+	glm::mat3 normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_view_matrix)));
 
-	glUniformMatrix4fv(_mvp_location, 1, GL_FALSE, glm::value_ptr(mvp));
+	glUniformMatrix4fv(_model_view_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_matrix));
+	glUniformMatrix4fv(_model_view_projection_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
+	glUniformMatrix3fv(_normal_matrix_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 
 	_track->draw();
 }

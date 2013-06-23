@@ -19,7 +19,9 @@ class Gameplay : public GameState {
 	private:
 		Shader* _shader;
 		Track* _track;
-		GLuint _mvp_location;
+		GLuint _model_view_projection_matrix_location;
+		GLuint _model_view_matrix_location;
+		GLuint _normal_matrix_location;
 };
 
 #endif

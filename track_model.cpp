@@ -1,6 +1,8 @@
 #include "track_model.hpp"
 #include "splines.hpp"
 
+#include <glm/gtx/random.hpp>
+
 const float WIDTH = 10.0f;
 const float HEIGHT = 5.0f;
 
@@ -49,12 +51,17 @@ std::vector<glm::vec3> TrackModel::generateVertices() const {
 }
 
 void TrackModel::pushTriangle(std::vector<glm::vec3>& vertices, const Triangle& t, const Triangle& n) const {
+	glm::vec3 color(1.0, 0.0, 0.0);
+
 	vertices.push_back(t.a);
-	vertices.push_back(t.b);
-	vertices.push_back(t.c);
 	vertices.push_back(n.a);
+	vertices.push_back(color);
+	vertices.push_back(t.b);
 	vertices.push_back(n.b);
+	vertices.push_back(color);
+	vertices.push_back(t.c);
 	vertices.push_back(n.c);
+	vertices.push_back(color);
 }
 
 TrackModel::LeftRight TrackModel::pointVertices(unsigned int i) const {

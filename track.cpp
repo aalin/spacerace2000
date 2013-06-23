@@ -18,14 +18,20 @@ Track::Track(std::vector<glm::vec3> key_points) {
 void Track::draw() const {
 	glBindBuffer(GL_ARRAY_BUFFER, _vertex_buffer_id);
 
+	unsigned int size = sizeof(glm::vec3);
+
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, size * 3, (void*)(size * 0));
 
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, size * 3, (void*)(size * 1));
+
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, size * 3, (void*)(size * 2));
 
 	glDrawArrays(GL_TRIANGLES, 0, _size);
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
 }
