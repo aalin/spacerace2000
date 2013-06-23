@@ -8,6 +8,7 @@
 class Track {
 	public:
 		Track(std::vector<glm::vec3> points);
+		~Track();
 
 		void draw() const;
 
