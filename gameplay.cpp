@@ -22,6 +22,9 @@ Gameplay::~Gameplay() {
 void Gameplay::setup() {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
 	_shader = new Shader("shaders/lighting");
 	_shader->use();
@@ -103,12 +106,12 @@ void Gameplay::draw() {
 
 	_shader->use();
 
-	glm::mat4 projection_matrix = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 5000.0f);
+	glm::mat4 projection_matrix = glm::perspective(30.0f, 4.0f / 3.0f, 0.1f, 2000.0f);
 
 	float x = glfwGetTime();
 	glm::mat4 view_matrix = glm::lookAt(
-		glm::vec3(std::cos(x / 10.0) * 500.0, std::sin(x / 10.0) * 500.0, 300.0), // Camera position
-		glm::vec3(0.0, 0.0, 100.0), // Look at
+		glm::vec3(-200 + std::cos(x / 2.0) * 400.0, -200 + std::sin(x / 2.0) * 400.0, 100.0), // Camera position
+		glm::vec3(-200.0, -200.0, 100.0), // Look at
 		glm::vec3(0.0, 0.0, 1.0)
 	);
 

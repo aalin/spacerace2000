@@ -1,17 +1,19 @@
 #include "track_model.hpp"
 #include "splines.hpp"
+#include "vertex.hpp"
 
-#include <glm/gtx/random.hpp>
+#include <glm/gtc/constants.hpp>
 
 const float WIDTH = 10.0f;
 const float HEIGHT = 5.0f;
+const float PI = 3.141592653589793;
 
 TrackModel::TrackModel(std::vector<glm::vec3> key_points) {
 	_points = Splines(key_points).generate(15);
 }
 
-std::vector<glm::vec3> TrackModel::generateVertices() const {
-	std::vector<glm::vec3> vertices;
+std::vector<Vertex> TrackModel::generateVertices() const {
+	std::vector<Vertex> vertices;
 
 	std::vector<glm::vec3> top_surface_normals;
 	std::vector<glm::vec3> right_surface_normals;
@@ -21,13 +23,13 @@ std::vector<glm::vec3> TrackModel::generateVertices() const {
 		LeftRight lr1 = pointVertices(i + 1);
 
 		top_surface_normals.push_back(glm::normalize(
-			Triangle{ lr0.right, lr1.right, lr0.left }.surfaceNormal() +
-			Triangle{ lr0.left, lr1.right, lr1.left }.surfaceNormal()
+			surfaceNormal(lr0.right, lr1.right, lr0.left) +
+			surfaceNormal(lr0.left, lr1.right, lr1.left)
 		));
 
 		right_surface_normals.push_back(glm::normalize(
-			Triangle{ lr1.right, lr0.right, bottomOf(lr0.left) }.surfaceNormal() +
-			Triangle{ lr1.right, bottomOf(lr0.right), bottomOf(lr1.right) }.surfaceNormal()
+			surfaceNormal(lr1.right, lr0.right, bottomOf(lr0.right)) +
+			surfaceNormal(lr1.right, bottomOf(lr0.right), bottomOf(lr1.right))
 		));
 	}
 
@@ -35,37 +37,87 @@ std::vector<glm::vec3> TrackModel::generateVertices() const {
 		LeftRight lr0 = pointVertices(i);
 		LeftRight lr1 = pointVertices(i + 1);
 
+		glm::vec4 color0 = colorAt(i);
+		glm::vec4 color1 = colorAt(i + 1);
+
 		// Top
 		glm::vec3 top_normal0 = vertexNormal(top_surface_normals, i);
 		glm::vec3 top_normal1 = vertexNormal(top_surface_normals, i + 1);
 
-		pushTriangle(vertices, { lr0.right, lr1.right, lr0.left }, { top_normal0, top_normal1, top_normal0 });
-		pushTriangle(vertices, { lr0.left, lr1.right, lr1.left }, { top_normal0, top_normal1, top_normal1 });
+		pushTriangle(vertices, {
+			Vertex{ lr1.right, top_normal1, color1 },
+			Vertex{ lr0.right, top_normal0, color0 },
+			Vertex{ lr0.left, top_normal0, color1 },
+		});
+
+		pushTriangle(vertices, {
+			Vertex{ lr1.right, top_normal1, color1 },
+			Vertex{ lr0.left, top_normal0, color0 },
+			Vertex{ lr1.left, top_normal1, color1 }
+		});
+
+		// Bottom
+
+		glm::vec3 bottom_normal0 = glm::vec3(0.0) - top_normal0;
+		glm::vec3 bottom_normal1 = glm::vec3(0.0) - top_normal1;
+
+		pushTriangle(vertices, {
+			Vertex { bottomOf(lr0.right), bottom_normal0, color0 },
+			Vertex { bottomOf(lr1.right), bottom_normal1, color1 },
+			Vertex { bottomOf(lr0.left), bottom_normal0, color0 },
+		});
+
+		pushTriangle(vertices, {
+			Vertex { bottomOf(lr0.left), bottom_normal0, color0 },
+			Vertex { bottomOf(lr1.right), bottom_normal1, color1 },
+			Vertex { bottomOf(lr1.left), bottom_normal1, color1 },
+		});
+
+
+		// Right
+		glm::vec3 right_normal0 = vertexNormal(right_surface_normals, i);
+		glm::vec3 right_normal1 = vertexNormal(right_surface_normals, i + 1);
+
+		pushTriangle(vertices, {
+			Vertex { lr1.right, right_normal1, color1 },
+			Vertex { bottomOf(lr0.right), right_normal0, color0 },
+			Vertex { lr0.right, right_normal0, color0 },
+		});
+
+		pushTriangle(vertices, {
+			Vertex { bottomOf(lr0.right), right_normal0, color0 },
+			Vertex { lr1.right, right_normal1, color1 },
+			Vertex { bottomOf(lr1.right), right_normal1, color1 },
+		});
 
 		// Left
-		//pushTriangle(vertices, { lr0.right, lr1.right, lr0.left });
-		//pushTriangle(vertices, { lr0.left, lr1.right, lr1.left });
+		glm::vec3 left_normal0 = glm::vec3(0.0) - right_normal0;
+		glm::vec3 left_normal1 = glm::vec3(0.0) - right_normal1;
+
+		pushTriangle(vertices, {
+			Vertex { lr1.left, left_normal1, color1 },
+			Vertex { lr0.left, left_normal0, color0 },
+			Vertex { bottomOf(lr1.left), left_normal1, color1 },
+		});
+
+		pushTriangle(vertices, {
+			Vertex { bottomOf(lr1.left), left_normal1, color1 },
+			Vertex { lr0.left, left_normal0, color0 },
+			Vertex { bottomOf(lr0.left), left_normal0, color0 },
+		});
 	}
 
 	return vertices;
 }
 
-void TrackModel::pushTriangle(std::vector<glm::vec3>& vertices, const Triangle& t, const Triangle& n) const {
-	glm::vec3 color(1.0, 0.0, 0.0);
-
+void TrackModel::pushTriangle(std::vector<Vertex>& vertices, const Triangle& t) const {
 	vertices.push_back(t.a);
-	vertices.push_back(n.a);
-	vertices.push_back(color);
 	vertices.push_back(t.b);
-	vertices.push_back(n.b);
-	vertices.push_back(color);
 	vertices.push_back(t.c);
-	vertices.push_back(n.c);
-	vertices.push_back(color);
 }
 
 TrackModel::LeftRight TrackModel::pointVertices(unsigned int i) const {
-	glm::vec3 p0(getPoint(i));
+	glm::vec3 p0(getPoint(i));;
 	glm::vec3 p1(getPoint(i + 1));
 
 	glm::vec3 delta(p0 - p1);
@@ -82,6 +134,10 @@ glm::vec3 TrackModel::bottomOf(glm::vec3 v) const {
 	return v - glm::vec3(0.0f, 0.0f, HEIGHT);
 }
 
+glm::vec3 TrackModel::surfaceNormal(glm::vec3 a, glm::vec3 b, glm::vec3 c) const {
+	return glm::normalize(glm::cross(c - a, b - a));
+}
+
 glm::vec3 TrackModel::vertexNormal(const std::vector<glm::vec3>& surface_normals, unsigned int index) const {
 	float radius = 10;
 	glm::vec3 normal(0.0);
@@ -92,4 +148,15 @@ glm::vec3 TrackModel::vertexNormal(const std::vector<glm::vec3>& surface_normals
 	}
 
 	return glm::normalize(normal);
+}
+
+glm::vec4 TrackModel::colorAt(unsigned int i) const {
+	float x = i / static_cast<float>(_points.size());
+
+	return glm::vec4(
+		std::pow(std::sin((x + 0) * PI + 0 / 3.0 * PI), 2),
+		std::pow(std::sin((x + 1) * PI + 1 / 3.0 * PI), 2),
+		std::pow(std::sin((x + 2) * PI + 2 / 3.0 * PI), 2),
+		1.0
+	);
 }

@@ -1,18 +1,24 @@
 #ifndef TRACK_MODEL
 #define TRACK_MODEL
 
-#include "triangle.hpp"
 #include <vector>
+#include "vertex.hpp"
 
 class TrackModel {
 	public:
+		struct Triangle {
+			Vertex a;
+			Vertex b;
+			Vertex c;
+		};
+
 		struct LeftRight {
 			glm::vec3 left;
 			glm::vec3 right;
 		};
 
 		TrackModel(std::vector<glm::vec3> key_points);
-		std::vector<glm::vec3> generateVertices() const;
+		std::vector<Vertex> generateVertices() const;
 
 	private:
 		std::vector<glm::vec3> _points;
@@ -24,8 +30,10 @@ class TrackModel {
 		LeftRight pointVertices(unsigned int i) const;
 		glm::vec3 bottomOf(glm::vec3) const;
 
-		void pushTriangle(std::vector<glm::vec3>& vertices, const Triangle& t, const Triangle& n) const;
+		void pushTriangle(std::vector<Vertex>& vertices, const Triangle& t) const;
 
+		glm::vec4 colorAt(unsigned int index) const;
+		glm::vec3 surfaceNormal(glm::vec3 a, glm::vec3 b, glm::vec3 c) const;
 		glm::vec3 vertexNormal(const std::vector<glm::vec3>& surface_normals, unsigned int index) const;
 };
 
