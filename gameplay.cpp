@@ -110,8 +110,8 @@ void Gameplay::draw() {
 
 	float x = glfwGetTime();
 	glm::mat4 view_matrix = glm::lookAt(
-		glm::vec3(-200 + std::cos(x / 2.0) * 400.0, -200 + std::sin(x / 2.0) * 400.0, 100.0), // Camera position
-		glm::vec3(-200.0, -200.0, 100.0), // Look at
+		glm::vec3(-200 + std::cos(x / 2.0) * 400.0, -200 + std::sin(x / 2.0) * 400.0, 50.0), // Camera position
+		glm::vec3(-200.0, -200.0, 0.0), // Look at
 		glm::vec3(0.0, 0.0, 1.0)
 	);
 
