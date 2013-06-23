@@ -112,11 +112,13 @@ void Gameplay::draw() {
 
 	glm::mat4 projection_matrix = glm::perspective(30.0f, 4.0f / 3.0f, 0.1f, 2000.0f);
 
-	float camera_x = std::cos((_racer->getDirection() - 90.0) * 3.14159 / 180.0) * 50.0;
-	float camera_y = std::sin((_racer->getDirection() - 90.0) * 3.14159 / 180.0) * 50.0;
+	float dir = _racer->getDirection() - 90.0;
+	dir = glfwGetTime() * 10.0;
+	float camera_x = std::cos(dir * 3.14159 / 180.0) * 50.0;
+	float camera_y = std::sin(dir * 3.14159 / 180.0) * 50.0;
 
 	glm::mat4 view_matrix = glm::lookAt(
-		glm::vec3(camera_x, camera_y, 30.0),
+		_racer->getPosition() + glm::vec3(camera_x, camera_y, 30.0),
 		_racer->getPosition(),
 		glm::vec3(0.0, 0.0, 1.0)
 	);

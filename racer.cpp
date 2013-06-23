@@ -2,6 +2,7 @@
 #include "racer_model.hpp"
 
 Racer::Racer() {
+	_direction = 0.0;
 }
 
 Racer::~Racer() {
