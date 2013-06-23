@@ -2,36 +2,84 @@
 #include "gameplay.hpp"
 #include "framebuffer.hpp"
 #include "shader.hpp"
+#include "track.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
-
-static const GLfloat vertices[] = {
-	-1.0f, -1.0f, 0.0f,
-	1.0f, -1.0f, 0.0f,
-	0.0f,  1.0f, 0.0f,
-};
+#include <vector>
 
 Gameplay::Gameplay() : _shader(0) {
 }
 
 Gameplay::~Gameplay() {
 	delete _shader;
+	delete _track;
 }
 
 void Gameplay::setup() {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glEnable(GL_DEPTH_TEST);
+
 	_shader = new Shader("shaders/lighting");
+	_shader->use();
+	_mvp_location = _shader->uniformLocation("MVP");
 
-	glGenVertexArrays(1, &_vertex_array_id);
-	glBindVertexArray(_vertex_array_id);
+	std::vector<glm::vec3> track_points;
+	track_points.push_back(glm::vec3(-783.13, 0.00, 0.00));
+	track_points.push_back(glm::vec3(-686.75, 48.19, 0.00));
+	track_points.push_back(glm::vec3(-554.22, 72.29, 0.00));
+	track_points.push_back(glm::vec3(-397.59, 60.24, 15.00));
+	track_points.push_back(glm::vec3(-240.96, 0.00, 30.00));
+	track_points.push_back(glm::vec3(-120.48, -108.43, 15.00));
+	track_points.push_back(glm::vec3(-48.19, -216.87, 0.00));
+	track_points.push_back(glm::vec3(12.05, -313.25, 0.00));
+	track_points.push_back(glm::vec3(48.19, -445.78, 0.00));
+	track_points.push_back(glm::vec3(108.43, -638.55, 0.00));
+	track_points.push_back(glm::vec3(108.43, -710.84, 0.00));
+	track_points.push_back(glm::vec3(72.29, -783.13, 0.00));
+	track_points.push_back(glm::vec3(0.00, -867.47, 0.00));
+	track_points.push_back(glm::vec3(-72.29, -915.66, 0.00));
+	track_points.push_back(glm::vec3(-192.77, -927.71, 40.00));
+	track_points.push_back(glm::vec3(-277.11, -891.57, 40.00));
+	track_points.push_back(glm::vec3(-277.11, -795.18, 80.00));
+	track_points.push_back(glm::vec3(-228.92, -734.94, 80.00));
+	track_points.push_back(glm::vec3(-144.58, -710.84, 80.00));
+	track_points.push_back(glm::vec3(-48.19, -674.70, 80.00));
+	track_points.push_back(glm::vec3(24.10, -638.55, 80.00));
+	track_points.push_back(glm::vec3(72.29, -566.27, 80.00));
+	track_points.push_back(glm::vec3(120.48, -433.73, 80.00));
+	track_points.push_back(glm::vec3(132.53, -289.16, 80.00));
+	track_points.push_back(glm::vec3(108.43, -144.58, 40.00));
+	track_points.push_back(glm::vec3(60.24, -24.10, 0.00));
+	track_points.push_back(glm::vec3(-72.29, 12.05, -20.00));
+	track_points.push_back(glm::vec3(-192.77, -60.24, -40.00));
+	track_points.push_back(glm::vec3(-228.92, -180.72, -20.00));
+	track_points.push_back(glm::vec3(-168.67, -301.20, 0.00));
+	track_points.push_back(glm::vec3(-156.63, -469.88, 0.00));
+	track_points.push_back(glm::vec3(-192.77, -566.27, 0.00));
+	track_points.push_back(glm::vec3(-265.06, -650.60, 0.00));
+	track_points.push_back(glm::vec3(-385.54, -662.65, 0.00));
+	track_points.push_back(glm::vec3(-481.93, -614.46, -40.00));
+	track_points.push_back(glm::vec3(-542.17, -493.98, -40.00));
+	track_points.push_back(glm::vec3(-481.93, -373.49, -40.00));
+	track_points.push_back(glm::vec3(-349.40, -337.35, -40.00));
+	track_points.push_back(glm::vec3(-216.87, -373.49, -80.00));
+	track_points.push_back(glm::vec3(-132.53, -481.93, -80.00));
+	track_points.push_back(glm::vec3(-120.48, -626.51, -40.00));
+	track_points.push_back(glm::vec3(-168.67, -771.08, 0.00));
+	track_points.push_back(glm::vec3(-253.01, -855.42, 0.00));
+	track_points.push_back(glm::vec3(-397.59, -891.57, 0.00));
+	track_points.push_back(glm::vec3(-590.36, -855.42, 0.00));
+	track_points.push_back(glm::vec3(-734.94, -759.04, 0.00));
+	track_points.push_back(glm::vec3(-771.08, -626.51, 0.00));
+	track_points.push_back(glm::vec3(-734.94, -469.88, 0.00));
+	track_points.push_back(glm::vec3(-855.42, -301.20, 0.00));
+	track_points.push_back(glm::vec3(-855.42, -84.34, 0.00));
 
-	glGenBuffers(1, &_vertex_buffer_id);
-	glBindBuffer(GL_ARRAY_BUFFER, _vertex_buffer_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	_track = new Track(track_points);
 }
 
 void Gameplay::pause() {
@@ -47,23 +95,19 @@ void Gameplay::draw() {
 
 	_shader->use();
 
-	glm::mat4 projection_matrix = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+	glm::mat4 projection_matrix = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 5000.0f);
 
 	glm::mat4 view_matrix = glm::lookAt(
-		glm::vec3(4,3,3), // Camera is at (4,3,3), in World Space
-		glm::vec3(0,0,0), // and looks at the origin
-		glm::vec3(0,1,0)
+		glm::vec3(500.0, 500.0, 100.0), // Camera is at (4,3,3), in World Space
+		glm::vec3(0.0, 0.0, 0.0), // and looks at the origin
+		glm::vec3(0.0, 0.0, 1.0)
 	);
 
 	glm::mat4 model_matrix(1.0);
 
 	glm::mat4 mvp = projection_matrix * view_matrix * model_matrix;
 
-	_mpv_location = _shader->uniformLocation("MVP");
-	glUniformMatrix4fv(_mpv_location, 1, GL_FALSE, glm::value_ptr(mvp));
+	glUniformMatrix4fv(_mvp_location, 1, GL_FALSE, glm::value_ptr(mvp));
 
-	int pos_attrib = _shader->attribLocation("vertex_position");
-	glEnableVertexAttribArray(pos_attrib);
-	glVertexAttribPointer(pos_attrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	_track->draw();
 }

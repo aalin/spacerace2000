@@ -4,6 +4,7 @@
 #include "game_state.hpp"
 
 class Shader;
+class Track;
 
 class Gameplay : public GameState {
 	public:
@@ -17,9 +18,8 @@ class Gameplay : public GameState {
 
 	private:
 		Shader* _shader;
-		GLuint _mpv_location;
-		GLuint _vertex_buffer_id;
-		GLuint _vertex_array_id;
+		Track* _track;
+		GLuint _mvp_location;
 };
 
 #endif

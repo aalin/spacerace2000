@@ -6,7 +6,7 @@ std::string readSource(std::string filename) {
 	std::ifstream is(filename.c_str());
 
 	if(is.fail())
-		throw "error loading file";
+		throw "Error loading shader file";
 
 	is.seekg (0, std::ios::end);
 	unsigned int length = is.tellg();
@@ -21,10 +21,8 @@ std::string readSource(std::string filename) {
 
 GLuint createShader(GLenum shader_type, std::string filename) {
 	GLuint shader = glCreateShader(shader_type);
-	std::cout << "--- " << filename << ":" << std::endl;
+	std::cout << "\e[33mCompiling shader: " << filename << "\e[0m" << std::endl;
 	std::string source = readSource(filename);
-	std::cout << source << std::endl;
-	std::cout << "/// " << filename << std::endl;
 
 	const char* data = source.c_str();
 	glShaderSource(shader, 1, &data, 0);
@@ -39,13 +37,15 @@ GLuint createShader(GLenum shader_type, std::string filename) {
 		GLchar *info = new GLchar[log_length + 1];
 		glGetShaderInfoLog(shader, log_length, NULL, info);
 
-		std::cout << "Errors compiling " << filename << std::endl;
-		std::cout << info << std::endl;
+		std::cerr << "\e[31mErrors compiling " << filename << "\e[0m" << std::endl;
+		std::cerr << info << std::endl;
 
 		delete[] info;
 
 		throw;
 	}
+
+	std::cout << "\e[32m" << "Success!" << "\e[0m" << std::endl;
 
 	return shader;
 }
@@ -71,7 +71,7 @@ Shader::Shader(std::string basename) {
 
 		GLchar *info_log = new GLchar[log_length + 1];
 		glGetProgramInfoLog(_program, log_length, NULL, info_log);
-		std::cout << "Linker failure: " << info_log << std::endl;
+		std::cerr << "Linker failure: " << info_log << std::endl;
 		delete[] info_log;
 	}
 }
