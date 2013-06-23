@@ -5,6 +5,7 @@
 
 class Shader;
 class Track;
+class Racer;
 
 class Gameplay : public GameState {
 	public:
@@ -19,6 +20,8 @@ class Gameplay : public GameState {
 	private:
 		Shader* _shader;
 		Track* _track;
+		Racer* _racer;
+
 		GLuint _model_view_projection_matrix_location;
 		GLuint _model_view_matrix_location;
 		GLuint _normal_matrix_location;

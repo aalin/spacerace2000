@@ -12,7 +12,6 @@ Track::Track(std::vector<glm::vec3> key_points) {
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
 	_size = vertices.size() * sizeof(glm::vec3);
-	std::cout << _size << std::endl;
 }
 
 Track::~Track() {

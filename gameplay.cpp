@@ -3,6 +3,7 @@
 #include "framebuffer.hpp"
 #include "shader.hpp"
 #include "track.hpp"
+#include "racer.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -25,6 +26,7 @@ void Gameplay::setup() {
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	_shader = new Shader("shaders/lighting");
 	_shader->use();
@@ -91,12 +93,14 @@ void Gameplay::setup() {
 	track_points.push_back(glm::vec3(-855.42, -84.34, 0.00));
 
 	_track = new Track(track_points);
+	_racer = new Racer();
 }
 
 void Gameplay::pause() {
 }
 
 void Gameplay::update(double s) {
+	_racer->update(s);
 }
 
 #include <iostream>
@@ -108,10 +112,12 @@ void Gameplay::draw() {
 
 	glm::mat4 projection_matrix = glm::perspective(30.0f, 4.0f / 3.0f, 0.1f, 2000.0f);
 
-	float x = glfwGetTime();
+	float camera_x = std::cos((_racer->getDirection() - 90.0) * 3.14159 / 180.0) * 50.0;
+	float camera_y = std::sin((_racer->getDirection() - 90.0) * 3.14159 / 180.0) * 50.0;
+
 	glm::mat4 view_matrix = glm::lookAt(
-		glm::vec3(-200 + std::cos(x / 2.0) * 400.0, -200 + std::sin(x / 2.0) * 400.0, 50.0), // Camera position
-		glm::vec3(-200.0, -200.0, 0.0), // Look at
+		glm::vec3(camera_x, camera_y, 30.0),
+		_racer->getPosition(),
 		glm::vec3(0.0, 0.0, 1.0)
 	);
 
@@ -125,5 +131,6 @@ void Gameplay::draw() {
 	glUniformMatrix4fv(_model_view_projection_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
 	glUniformMatrix3fv(_normal_matrix_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 
-	_track->draw();
+//	_track->draw();
+	_racer->draw();
 }
