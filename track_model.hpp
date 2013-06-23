@@ -24,7 +24,9 @@ class TrackModel {
 		LeftRight pointVertices(unsigned int i) const;
 		glm::vec3 bottomOf(glm::vec3) const;
 
-		void pushTriangle(std::vector<glm::vec3>& vertices, const Triangle& t) const;
+		void pushTriangle(std::vector<glm::vec3>& vertices, const Triangle& t, const Triangle& n) const;
+
+		glm::vec3 vertexNormal(const std::vector<glm::vec3>& surface_normals, unsigned int index) const;
 };
 
 #endif
