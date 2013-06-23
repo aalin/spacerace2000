@@ -1,4 +1,4 @@
-FILES = main game game_state gameplay framebuffer shader opengl splines track
+FILES = main game game_state gameplay framebuffer shader opengl splines track track_model
 OBJS = $(addsuffix .o, $(FILES))
 
 CC=clang

@@ -21,7 +21,7 @@ Gameplay::~Gameplay() {
 
 void Gameplay::setup() {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glEnable(GL_DEPTH_TEST);
+	// glEnable(GL_DEPTH_TEST);
 
 	_shader = new Shader("shaders/lighting");
 	_shader->use();
@@ -98,8 +98,8 @@ void Gameplay::draw() {
 	glm::mat4 projection_matrix = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 5000.0f);
 
 	glm::mat4 view_matrix = glm::lookAt(
-		glm::vec3(500.0, 500.0, 100.0), // Camera is at (4,3,3), in World Space
-		glm::vec3(0.0, 0.0, 0.0), // and looks at the origin
+		glm::vec3(400.0, 400.0, 300.0), // Camera position
+		glm::vec3(0.0, 0.0, 100.0), // Look at
 		glm::vec3(0.0, 0.0, 1.0)
 	);
 
