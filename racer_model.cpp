@@ -52,6 +52,18 @@ void addSimpleTriangle(std::vector<RacerModel::Triangle> &triangles, glm::vec3 a
 	});
 }
 
+void assignSurfaceNormal(RacerModel::Triangle &triangle, glm::vec3 normal) {
+	triangle.a.normal = normal;
+	triangle.b.normal = normal;
+	triangle.c.normal = normal;
+}
+
+void addTriangleVertices(std::vector<Vertex>& vertices, const RacerModel::Triangle& triangle) {
+	vertices.push_back(triangle.a);
+	vertices.push_back(triangle.b);
+	vertices.push_back(triangle.c);
+}
+
 std::vector<Vertex> RacerModel::generateVertices() const {
 	std::vector<Vertex> vertices;
 
@@ -86,6 +98,7 @@ std::vector<Vertex> RacerModel::generateVertices() const {
 	}
 
 	// Set colors
+
 	for(auto it = triangles.begin(); it != triangles.end(); it++) {
 		it->a.color = glm::vec4(0.0, 0.0, 1.0, 1.0);
 		it->b.color = glm::vec4(0.0, 0.0, 1.0, 1.0);
@@ -93,43 +106,38 @@ std::vector<Vertex> RacerModel::generateVertices() const {
 	}
 
 	// Right side
+
 	for(auto it = triangles.begin(); it != triangles.end(); it++) {
 		glm::vec3 a = it->a.position;
 		glm::vec3 b = it->c.position;
 		glm::vec3 c = it->b.position;
+
 		glm::vec3 surface_normal = glm::normalize(glm::cross(c - a, b - a));
 
-		it->a.normal = surface_normal;
-		it->b.normal = surface_normal;
-		it->c.normal = surface_normal;
-
-		vertices.push_back(it->a);
-		vertices.push_back(it->b);
-		vertices.push_back(it->c);
+		assignSurfaceNormal(*it, surface_normal);
+		addTriangleVertices(vertices, *it);
 	}
+
 
 	// Left side
 
-	glm::vec3 reverse_x(-1.0, 1.0, 1.0);
+	const glm::vec3 reverse_x(-1.0, 1.0, 1.0);
 
 	for(auto it = triangles.begin(); it != triangles.end(); it++) {
+		// Reverse the positions
 		glm::vec3 p0 = it->a.position * reverse_x;
 		glm::vec3 p1 = it->b.position * reverse_x;
 		glm::vec3 p2 = it->c.position * reverse_x;
 
 		glm::vec3 surface_normal = glm::normalize(glm::cross(p2 - p0, p1 - p0));
 
+		// Reorder the positions so the triangles are drawn in the right order
 		it->a.position = p1;
 		it->b.position = p0;
 		it->c.position = p2;
 
-		it->a.normal = surface_normal;
-		it->b.normal = surface_normal;
-		it->c.normal = surface_normal;
-
-		vertices.push_back(it->a);
-		vertices.push_back(it->b);
-		vertices.push_back(it->c);
+		assignSurfaceNormal(*it, surface_normal);
+		addTriangleVertices(vertices, *it);
 	}
 
 	return vertices;
