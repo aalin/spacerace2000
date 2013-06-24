@@ -4,10 +4,8 @@
 
 #include <glm/gtc/constants.hpp>
 
-const float WIDTH = 10.0f;
-const float HEIGHT = 5.0f;
-
-TrackModel::TrackModel(std::vector<glm::vec3> key_points) {
+TrackModel::TrackModel(std::vector<glm::vec3> key_points, float width, float height)
+	: _width(width), _height(height) {
 	_points = Splines(key_points).generate(30);
 }
 
@@ -123,14 +121,14 @@ TrackModel::LeftRight TrackModel::pointVertices(unsigned int i) const {
 
 	glm::vec3 outwards(glm::normalize(glm::vec3(delta.y, -delta.x, 0)));
 
-	glm::vec3 left(p0 + outwards * -WIDTH);
-	glm::vec3 right(p0 + outwards * WIDTH);
+	glm::vec3 left(p0 + outwards * -_width);
+	glm::vec3 right(p0 + outwards * _width);
 
 	return { left, right };
 }
 
 glm::vec3 TrackModel::bottomOf(glm::vec3 v) const {
-	return v - glm::vec3(0.0f, 0.0f, HEIGHT);
+	return v - glm::vec3(0.0f, 0.0f, _height);
 }
 
 glm::vec3 TrackModel::surfaceNormal(glm::vec3 a, glm::vec3 b, glm::vec3 c) const {

@@ -17,10 +17,13 @@ class TrackModel {
 			glm::vec3 right;
 		};
 
-		TrackModel(std::vector<glm::vec3> key_points);
+		TrackModel(std::vector<glm::vec3> key_points, float width, float height);
 		std::vector<Vertex> generateVertices() const;
 
 	private:
+		const float _width;
+		const float _height;
+
 		std::vector<glm::vec3> _points;
 
 		glm::vec3 getPoint(unsigned int i) const {

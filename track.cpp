@@ -2,8 +2,11 @@
 #include "track_model.hpp"
 #include <iostream>
 
-Track::Track(std::vector<glm::vec3> key_points) : _track_info(key_points) {
-	std::vector<Vertex> vertices = TrackModel(key_points).generateVertices();
+const float WIDTH = 10.0f;
+const float HEIGHT = 4.0f;
+
+Track::Track(std::vector<glm::vec3> key_points) : _track_info(key_points, WIDTH) {
+	std::vector<Vertex> vertices = TrackModel(key_points, WIDTH, HEIGHT).generateVertices();
 
 	glGenVertexArrays(1, &_vertex_array_id);
 	glBindVertexArray(_vertex_array_id);

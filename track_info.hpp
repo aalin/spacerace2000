@@ -36,8 +36,13 @@ class TrackInfo {
 			}
 	};
 
+	struct LeftRight {
+		glm::vec3 left;
+		glm::vec3 right;
+	};
+
 	public:
-		TrackInfo(const std::vector<glm::vec3>& key_points);
+		TrackInfo(const std::vector<glm::vec3>& key_points, float width);
 
 		glm::vec3 positionAt(float distance) const;
 		float distanceNear(float distance, glm::vec3 position) const;
@@ -45,11 +50,15 @@ class TrackInfo {
 	private:
 		std::vector<PointInfo> _point_information;
 		float _length;
+		const float _width;
 
 		unsigned int indexAt(float distance) const;
 		const PointInfo& getPointInfo(unsigned int i) const {
 			return _point_information[i % _point_information.size()];
 		}
+
+		glm::vec3 getPoint(const std::vector<glm::vec3> points, unsigned int i) const;
+		LeftRight pointVertices(const std::vector<glm::vec3> points, unsigned int i) const;
 };
 
 #endif

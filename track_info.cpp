@@ -4,33 +4,10 @@
 #include <glm/gtx/closest_point.hpp>
 #include <algorithm>
 
-const float WIDTH = 30.0f;
 const unsigned int DETAIL = 5;
 
-struct LeftRight {
-	glm::vec3 left;
-	glm::vec3 right;
-};
 
-glm::vec3 getPoint(const std::vector<glm::vec3> points, unsigned int i) {
-	return points[i % points.size()];
-}
-
-LeftRight pointVertices(const std::vector<glm::vec3> points, unsigned int i) {
-	glm::vec3 p0(getPoint(points, i));
-	glm::vec3 p1(getPoint(points, i + 1));
-
-	glm::vec3 delta(p0 - p1);
-
-	glm::vec3 outwards(glm::normalize(glm::vec3(delta.y, -delta.x, 0)));
-
-	glm::vec3 left(p0 + outwards * -WIDTH);
-	glm::vec3 right(p0 + outwards * WIDTH);
-
-	return { left, right };
-}
-
-TrackInfo::TrackInfo(const std::vector<glm::vec3>& key_points) {
+TrackInfo::TrackInfo(const std::vector<glm::vec3>& key_points, float width) : _width(width) {
 	std::vector<glm::vec3> points(Splines(key_points).generate(DETAIL));
 
 	_length = 0.0;
@@ -115,4 +92,22 @@ unsigned int TrackInfo::indexAt(float distance) const {
 		if(_point_information[i].distance > distance)
 			return i - 1;
 	return 0;
+}
+
+glm::vec3 TrackInfo::getPoint(const std::vector<glm::vec3> points, unsigned int i) const {
+	return points[i % points.size()];
+}
+
+TrackInfo::LeftRight TrackInfo::pointVertices(const std::vector<glm::vec3> points, unsigned int i) const {
+	glm::vec3 p0(getPoint(points, i));
+	glm::vec3 p1(getPoint(points, i + 1));
+
+	glm::vec3 delta(p0 - p1);
+
+	glm::vec3 outwards(glm::normalize(glm::vec3(delta.y, -delta.x, 0)));
+
+	glm::vec3 left(p0 + outwards * -_width);
+	glm::vec3 right(p0 + outwards * _width);
+
+	return { left, right };
 }
