@@ -144,7 +144,7 @@ glm::vec3 TrackModel::vertexNormal(const std::vector<glm::vec3>& surface_normals
 
 	for(int x = -radius; x < radius; x++) {
 		float value = std::cos(std::fabs(x) / 2.0 / radius * 3.14159);
-		normal += surface_normals[(index - x) % surface_normals.size()] * value;
+		normal += surface_normals[(surface_normals.size() + index - x) % surface_normals.size()] * value;
 	}
 
 	return glm::normalize(normal);
