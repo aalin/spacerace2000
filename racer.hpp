@@ -16,12 +16,18 @@ class Racer {
 
 		void setDirection(float direction) { _direction = direction; }
 		float getDirection() const { return _direction; }
+		float getTurnRatio() const { return _turning / TURN_LIMIT; }
 
 	private:
 		RacerModel _model;
 
 		glm::vec3 _position;
 		float _direction;
+		float _speed;
+		float _turning;
+
+		static const float TURN_SPEED;
+		static const float TURN_LIMIT;
 };
 
 #endif
