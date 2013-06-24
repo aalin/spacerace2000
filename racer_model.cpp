@@ -113,8 +113,8 @@ std::vector<Vertex> RacerModel::generateVertices() const {
 		glm::vec3 c = it->b.position;
 
 		glm::vec3 surface_normal = glm::normalize(glm::cross(c - a, b - a));
-
 		assignSurfaceNormal(*it, surface_normal);
+
 		addTriangleVertices(vertices, *it);
 	}
 
@@ -130,13 +130,13 @@ std::vector<Vertex> RacerModel::generateVertices() const {
 		glm::vec3 p2 = it->c.position * reverse_x;
 
 		glm::vec3 surface_normal = glm::normalize(glm::cross(p2 - p0, p1 - p0));
+		assignSurfaceNormal(*it, surface_normal);
 
 		// Reorder the positions so the triangles are drawn in the right order
 		it->a.position = p1;
 		it->b.position = p0;
 		it->c.position = p2;
 
-		assignSurfaceNormal(*it, surface_normal);
 		addTriangleVertices(vertices, *it);
 	}
 

@@ -19,7 +19,7 @@ class RacerModel {
 		void draw() const;
 
 	private:
-		std::vector<Vertex> RacerModel::generateVertices() const;
+		std::vector<Vertex> generateVertices() const;
 
 		GLuint _vertex_buffer_id;
 		GLuint _vertex_array_id;

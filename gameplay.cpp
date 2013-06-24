@@ -133,6 +133,6 @@ void Gameplay::draw() {
 	glUniformMatrix4fv(_model_view_projection_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
 	glUniformMatrix3fv(_normal_matrix_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 
-//	_track->draw();
+	_track->draw();
 	_racer->draw();
 }

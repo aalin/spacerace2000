@@ -15,7 +15,7 @@ class Racer {
 		const glm::vec3 getPosition() const { return _position; }
 
 		void setDirection(float direction) { _direction = direction; }
-		const float getDirection() const { return _direction; }
+		float getDirection() const { return _direction; }
 
 	private:
 		RacerModel _model;
