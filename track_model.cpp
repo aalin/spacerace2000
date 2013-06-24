@@ -8,7 +8,7 @@ const float WIDTH = 10.0f;
 const float HEIGHT = 5.0f;
 
 TrackModel::TrackModel(std::vector<glm::vec3> key_points) {
-	_points = Splines(key_points).generate(15);
+	_points = Splines(key_points).generate(30);
 }
 
 std::vector<Vertex> TrackModel::generateVertices() const {
