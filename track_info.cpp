@@ -2,8 +2,10 @@
 #include "splines.hpp"
 
 #include <glm/gtx/closest_point.hpp>
+#include <algorithm>
 
-const float WIDTH = 10.0f;
+const float WIDTH = 30.0f;
+const unsigned int DETAIL = 5;
 
 struct LeftRight {
 	glm::vec3 left;
@@ -29,7 +31,7 @@ LeftRight pointVertices(const std::vector<glm::vec3> points, unsigned int i) {
 }
 
 TrackInfo::TrackInfo(const std::vector<glm::vec3>& key_points) {
-	std::vector<glm::vec3> points(Splines(key_points).generate(5));
+	std::vector<glm::vec3> points(Splines(key_points).generate(DETAIL));
 
 	_length = 0.0;
 
@@ -82,6 +84,9 @@ glm::vec3 TrackInfo::positionAt(float distance) const {
 }
 
 float TrackInfo::distanceNear(float distance, glm::vec3 position) const {
+	while(distance > _length)
+		distance -= _length;
+
 	std::vector<PointInfo> point_infos_around_position;
 
 	for(auto it = _point_information.begin(); it != _point_information.end(); it++) {
@@ -92,7 +97,15 @@ float TrackInfo::distanceNear(float distance, glm::vec3 position) const {
 	if(point_infos_around_position.empty())
 		return distance;
 
-	PointInfo current_segment = point_infos_around_position[0];
+	std::sort(
+		point_infos_around_position.begin(),
+		point_infos_around_position.end(),
+		[distance](const PointInfo &a, const PointInfo &b) -> bool {
+			return std::fabs(a.distance - distance) < std::fabs(b.distance - distance);
+		}
+	);
+
+	const PointInfo& current_segment = point_infos_around_position[0];
 
 	glm::vec3 a = glm::closestPointOnLine(position, current_segment.left0, current_segment.right0);
 	glm::vec3 b = glm::closestPointOnLine(position, current_segment.left1, current_segment.right1);

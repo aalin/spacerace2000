@@ -36,10 +36,9 @@ void Racer::update(double s, const Track& track) {
 
 	_direction -= _turning * s;
 
-	float track_distance = track.distanceNear(_distance, _position);
-	glm::vec3 track_position = track.positionAt(track_distance);
+	_distance = track.distanceNear(_distance, _position);
+	glm::vec3 track_position = track.positionAt(_distance);
 
-	_distance += _speed * s;
 	_position += glm::rotateZ(glm::vec3(1.0, 1.0, 0.0), _direction + 90.0f + 45.0f) * _speed;
 	_position.z = track_position.z + 2.0;
 }
