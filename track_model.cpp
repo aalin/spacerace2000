@@ -6,7 +6,6 @@
 
 const float WIDTH = 10.0f;
 const float HEIGHT = 5.0f;
-const float PI = 3.141592653589793;
 
 TrackModel::TrackModel(std::vector<glm::vec3> key_points) {
 	_points = Splines(key_points).generate(15);
@@ -143,7 +142,7 @@ glm::vec3 TrackModel::vertexNormal(const std::vector<glm::vec3>& surface_normals
 	glm::vec3 normal(0.0);
 
 	for(int x = -radius; x < radius; x++) {
-		float value = std::cos(std::fabs(x) / 2.0 / radius * 3.14159);
+		float value = std::cos(std::fabs(x) / radius * glm::half_pi<float>());
 		normal += surface_normals[(surface_normals.size() + index - x) % surface_normals.size()] * value;
 	}
 
@@ -154,9 +153,9 @@ glm::vec4 TrackModel::colorAt(unsigned int i) const {
 	float x = i / static_cast<float>(_points.size());
 
 	return glm::vec4(
-		std::pow(std::sin((x + 0) * PI + 0 / 3.0 * PI), 2),
-		std::pow(std::sin((x + 1) * PI + 1 / 3.0 * PI), 2),
-		std::pow(std::sin((x + 2) * PI + 2 / 3.0 * PI), 2),
+		std::pow(std::sin((x + 0) * glm::pi<float>() + 0 / 3.0 * glm::pi<float>()), 2),
+		std::pow(std::sin((x + 1) * glm::pi<float>() + 1 / 3.0 * glm::pi<float>()), 2),
+		std::pow(std::sin((x + 2) * glm::pi<float>() + 2 / 3.0 * glm::pi<float>()), 2),
 		1.0
 	);
 }

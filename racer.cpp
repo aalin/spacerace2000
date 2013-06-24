@@ -30,8 +30,7 @@ void Racer::update(double s, const Track& track) {
 		_turning -= _turning * s * 5.0;
 	} else {
 		_turning += turn * s * TURN_SPEED * _speed;
-		if(_turning < -TURN_LIMIT) _turning = -TURN_LIMIT;
-		if(_turning > TURN_LIMIT) _turning = TURN_LIMIT;
+		_turning = glm::clamp(_turning, -TURN_LIMIT, TURN_LIMIT);
 	}
 
 	_direction -= _turning * s;

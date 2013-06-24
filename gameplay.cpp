@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include <iostream>
 #include <vector>
@@ -110,12 +111,17 @@ void Gameplay::draw() {
 
 	glm::mat4 projection_matrix = glm::perspective(30.0f, 4.0f / 3.0f, 0.1f, 2000.0f);
 
-	float dir = _racer->getDirection();
-	float camera_x = std::cos(dir * 3.14159 / 180.0) * 50.0;
-	float camera_y = std::sin(dir * 3.14159 / 180.0) * 50.0;
+	const float dir = _racer->getDirection();
+	const float camera_distance = 50.0f;
+
+	const glm::vec3 camera_position(
+		_racer->getPosition() +
+		glm::rotateZ(glm::vec3(1.0, 1.0, 0.0), dir - 45.0f) * camera_distance +
+		glm::vec3(0.0, 0.0, 3.0)
+	);
 
 	glm::mat4 view_matrix = glm::lookAt(
-		_racer->getPosition() + glm::vec3(camera_x, camera_y, 3.0),
+		camera_position,
 		_racer->getPosition(),
 		glm::vec3(0.0, 0.0, 1.0)
 	);

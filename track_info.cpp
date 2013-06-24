@@ -60,10 +60,6 @@ TrackInfo::TrackInfo(const std::vector<glm::vec3>& key_points) {
 	}
 }
 
-float lerp(float a, float b, float t) {
-	return a + t * (b - a);
-}
-
 glm::vec3 TrackInfo::positionAt(float distance) const {
 	while(distance > _length)
 		distance -= _length;
@@ -76,11 +72,7 @@ glm::vec3 TrackInfo::positionAt(float distance) const {
 	float into = std::fabs(distance - current_point.distance);
 	float t = into / current_point.distance_to_next;
 
-	return glm::vec3(
-		lerp(current_point.center.x, next_point.center.x, t),
-		lerp(current_point.center.y, next_point.center.y, t),
-		lerp(current_point.center.z, next_point.center.z, t)
-	);
+	return glm::mix(current_point.center, next_point.center, t);
 }
 
 float TrackInfo::distanceNear(float distance, glm::vec3 position) const {
