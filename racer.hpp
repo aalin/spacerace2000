@@ -2,13 +2,14 @@
 #define RACER_HPP
 
 #include "racer_model.hpp"
+#include "track.hpp"
 
 class Racer {
 	public:
-		Racer();
+		Racer(glm::vec3 position);
 		~Racer();
 
-		void update(double s);
+		void update(double s, const Track& track);
 		void draw() const;
 
 		void setPosition(glm::vec3 position) { _position = position; }
@@ -25,6 +26,7 @@ class Racer {
 		float _direction;
 		float _speed;
 		float _turning;
+		float _distance;
 
 		static const float TURN_SPEED;
 		static const float TURN_LIMIT;

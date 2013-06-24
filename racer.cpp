@@ -8,16 +8,18 @@
 const float Racer::TURN_SPEED = 250.0;
 const float Racer::TURN_LIMIT = 250.0;
 
-Racer::Racer() {
+Racer::Racer(glm::vec3 position) {
 	_direction = 120.0;
 	_speed = 1.0;
 	_turning = 0.0;
+	_distance = 0.0;
+	_position = position;
 }
 
 Racer::~Racer() {
 }
 
-void Racer::update(double s) {
+void Racer::update(double s, const Track& track) {
 	int turn = 0;
 	if(glfwGetKey(GLFW_KEY_LEFT) == GLFW_PRESS)
 		turn -= 1;
@@ -34,6 +36,9 @@ void Racer::update(double s) {
 
 	_direction -= _turning * s;
 
+	float track_distance = track.distanceNear(_distance, _position);
+	_distance += _speed * s;
+	//_position = track.positionAt(_distance);
 	_position += glm::rotateZ(glm::vec3(1.0, 1.0, 0.0), _direction + 90.0f + 45.0f) * _speed;
 }
 

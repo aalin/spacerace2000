@@ -93,14 +93,14 @@ void Gameplay::setup() {
 	track_points.push_back(glm::vec3(-855.42, -84.34, 0.00));
 
 	_track = new Track(track_points);
-	_racer = new Racer();
+	_racer = new Racer(_track->positionAt(0.0));
 }
 
 void Gameplay::pause() {
 }
 
 void Gameplay::update(double s) {
-	_racer->update(s);
+	_racer->update(s, *_track);
 }
 
 #include <iostream>

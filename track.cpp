@@ -2,7 +2,7 @@
 #include "track_model.hpp"
 #include <iostream>
 
-Track::Track(std::vector<glm::vec3> key_points) {
+Track::Track(std::vector<glm::vec3> key_points) : _track_info(key_points) {
 	std::vector<Vertex> vertices = TrackModel(key_points).generateVertices();
 
 	glGenVertexArrays(1, &_vertex_array_id);
