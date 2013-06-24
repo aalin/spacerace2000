@@ -43,7 +43,10 @@ void Game::run() {
 	while(_running) {
 		double current_time = glfwGetTime();
 
-		update(current_time - last_time);
+		if(glfwGetKey(GLFW_KEY_SPACE))
+			update(0.0);
+		else
+			update(current_time - last_time);
 		draw();
 
 		last_time = current_time;

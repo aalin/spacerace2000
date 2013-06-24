@@ -103,8 +103,6 @@ void Gameplay::update(double s) {
 	_racer->update(s, *_track);
 }
 
-#include <iostream>
-
 void Gameplay::draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -113,11 +111,11 @@ void Gameplay::draw() {
 	glm::mat4 projection_matrix = glm::perspective(30.0f, 4.0f / 3.0f, 0.1f, 2000.0f);
 
 	float dir = _racer->getDirection();
-	float camera_x = std::cos(dir * 3.14159 / 180.0) * 150.0;
-	float camera_y = std::sin(dir * 3.14159 / 180.0) * 150.0;
+	float camera_x = std::cos(dir * 3.14159 / 180.0) * 50.0;
+	float camera_y = std::sin(dir * 3.14159 / 180.0) * 50.0;
 
 	glm::mat4 view_matrix = glm::lookAt(
-		_racer->getPosition() + glm::vec3(camera_x, camera_y, 50.0),
+		_racer->getPosition() + glm::vec3(camera_x, camera_y, 3.0),
 		_racer->getPosition(),
 		glm::vec3(0.0, 0.0, 1.0)
 	);
@@ -142,9 +140,9 @@ void Gameplay::draw() {
 	model_view_projection_matrix = projection_matrix * view_matrix * model_matrix;
 	normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_view_matrix)));
 
-	glUniformMatrix4fv(_model_view_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_matrix));
+	//glUniformMatrix4fv(_model_view_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_matrix));
 	glUniformMatrix4fv(_model_view_projection_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
-	glUniformMatrix3fv(_normal_matrix_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));
+	// glUniformMatrix3fv(_normal_matrix_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 
 	_racer->draw();
 }

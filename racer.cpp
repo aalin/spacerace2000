@@ -5,12 +5,12 @@
 
 #include <iostream>
 
-const float Racer::TURN_SPEED = 250.0;
-const float Racer::TURN_LIMIT = 250.0;
+const float Racer::TURN_SPEED = 10.0;
+const float Racer::TURN_LIMIT = 150.0;
 
 Racer::Racer(glm::vec3 position) {
 	_direction = 120.0;
-	_speed = 1.0;
+	_speed = 100.0;
 	_turning = 0.0;
 	_distance = 0.0;
 	_position = position;
@@ -39,7 +39,7 @@ void Racer::update(double s, const Track& track) {
 	_distance = track.distanceNear(_distance, _position);
 	glm::vec3 track_position = track.positionAt(_distance);
 
-	_position += glm::rotateZ(glm::vec3(1.0, 1.0, 0.0), _direction + 90.0f + 45.0f) * _speed;
+	_position += glm::rotateZ(glm::vec3(1.0, 1.0, 0.0), _direction + 90.0f + 45.0f) * _speed * static_cast<float>(s);
 	_position.z = track_position.z + 2.0;
 }
 
