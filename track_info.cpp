@@ -1,6 +1,8 @@
 #include "track_info.hpp"
 #include "splines.hpp"
 
+#include <glm/gtx/closest_point.hpp>
+
 const float WIDTH = 10.0f;
 
 struct LeftRight {
@@ -80,7 +82,27 @@ glm::vec3 TrackInfo::positionAt(float distance) const {
 }
 
 float TrackInfo::distanceNear(float distance, glm::vec3 position) const {
-	return 0.0;
+	std::vector<PointInfo> point_infos_around_position;
+
+	for(auto it = _point_information.begin(); it != _point_information.end(); it++) {
+		if(it->hasPoint(position))
+			point_infos_around_position.push_back(*it);
+	}
+
+	if(point_infos_around_position.empty())
+		return distance;
+
+	PointInfo current_segment = point_infos_around_position[0];
+
+	glm::vec3 a = glm::closestPointOnLine(position, current_segment.left0, current_segment.right0);
+	glm::vec3 b = glm::closestPointOnLine(position, current_segment.left1, current_segment.right1);
+
+	float a_dist = glm::distance(position, a);
+	float b_dist = glm::distance(position, b);
+
+	float into = a_dist / (a_dist + b_dist);
+
+	return current_segment.distance + current_segment.distance_to_next * into;
 }
 
 unsigned int TrackInfo::indexAt(float distance) const {

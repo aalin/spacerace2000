@@ -18,14 +18,14 @@ class TrackInfo {
 			glm::vec3 left1;
 			glm::vec3 right1;
 
-			bool hasPoint(glm::vec3 point) {
+			bool hasPoint(glm::vec3 point) const {
 				return
 					pointInTriangle(point, left0, left1, right0) ||
 					pointInTriangle(point, right0, left1, right1);
 			};
 
 		private:
-			bool pointInTriangle(glm::vec3 p, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) {
+			bool pointInTriangle(glm::vec3 p, glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) const {
 				// Barycentric coordinates, wtf.
 				// http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
 				float a = 0.5 * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2.y) + p1.x * p2.y);
