@@ -113,14 +113,14 @@ std::vector<Vertex> RacerModel::generateVertices() const {
 	glm::vec3 reverse_x(-1.0, 1.0, 1.0);
 
 	for(auto it = triangles.begin(); it != triangles.end(); it++) {
-		glm::vec3 p1 = it->a.position * reverse_x;
-		glm::vec3 p0 = it->b.position * reverse_x;
+		glm::vec3 p0 = it->a.position * reverse_x;
+		glm::vec3 p1 = it->b.position * reverse_x;
 		glm::vec3 p2 = it->c.position * reverse_x;
 
 		glm::vec3 surface_normal = glm::normalize(glm::cross(p2 - p0, p1 - p0));
 
-		it->a.position = p0;
-		it->b.position = p1;
+		it->a.position = p1;
+		it->b.position = p0;
 		it->c.position = p2;
 
 		it->a.normal = surface_normal;
