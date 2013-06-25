@@ -25,8 +25,6 @@ class Shader {
 		}
 
 	private:
-		GLuint _vertex_shader;
-		GLuint _fragment_shader;
 		GLuint _program;
 };
 
