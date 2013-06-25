@@ -28,3 +28,9 @@ Framebuffer::Framebuffer(unsigned int width, unsigned int height) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
+
+Framebuffer::~Framebuffer() {
+	glDeleteFramebuffers(1, &_framebuffer_id);
+	glDeleteTextures(1, &_texture_id);
+	glDeleteRenderbuffers(1, &_renderbuffer_id);
+}
