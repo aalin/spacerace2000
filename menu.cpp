@@ -54,7 +54,11 @@ void Menu::printToTerminal() {
 	std::cout << "== GAME MENU ==" << std::endl;
 
 	for(unsigned int i = 0; i < _menu_items.size(); i++) {
-		std::cout << "\e[" << ((_current_menu_item == i) ? 32 : 33) << "m";
+		if(static_cast<int>(i) == _current_menu_item)
+			std::cout << "\e[" << 32 << "m"; // Green
+		else
+			std::cout << "\e[" << 33 << "m"; // Yellow
+
 		std::cout << _menu_items[i]->name();
 		std::cout << "\e[0m" << std::endl;
 	}

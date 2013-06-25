@@ -35,6 +35,9 @@ Game::Game(int width, int height, Game::WindowMode window_mode) {
 }
 
 Game::~Game() {
+	while(!_states.empty())
+		popState();
+
 	std::cout << "Game::~Game();" << std::endl;
 	glfwTerminate();
 }
@@ -81,6 +84,10 @@ void Game::pushState(GameState* state) {
 		_states.top()->pause();
 	_states.push(state);
 	state->setup();
+}
+
+void Game::popState() {
+	_states.pop();
 }
 
 void Game::keyboard(int key, int action) {

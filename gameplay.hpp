@@ -18,6 +18,8 @@ class Gameplay : public GameState {
 		void draw();
 
 		void keyPress(int key) {
+			if(key == GLFW_KEY_ESC)
+				getGame().popState();
 		}
 
 		void keyRelease(int key) {

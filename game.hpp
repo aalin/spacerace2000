@@ -20,6 +20,7 @@ class Game {
 		void quit();
 
 		void pushState(GameState* state);
+		void popState();
 
 		static void glfwKeyCallback(int key, int action) {
 			getInstance().keyboard(key, action);
