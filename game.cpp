@@ -2,7 +2,7 @@
 #include "game.hpp"
 #include "gameplay.hpp"
 
-Game::Game(int width, int height, Game::WindowMode::Mode window_mode) {
+Game::Game(int width, int height, Game::WindowMode window_mode) {
 
 	if(!glfwInit())
 		throw "GLFW could not be initialized.";
@@ -15,7 +15,7 @@ Game::Game(int width, int height, Game::WindowMode::Mode window_mode) {
 
 	glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
 
-	if(!glfwOpenWindow(width, height, 0, 0, 0, 0, 16, 0, window_mode))
+	if(!glfwOpenWindow(width, height, 0, 0, 0, 0, 16, 0, static_cast<int>(window_mode)))
 		throw "GLFW window could not be opened.";
 
 	glPrintErrors();

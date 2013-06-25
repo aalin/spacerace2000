@@ -7,14 +7,12 @@
 
 class Game {
 	public:
-		struct WindowMode {
-			enum Mode {
-				Window = GLFW_WINDOW,
-				Fullscreen = GLFW_FULLSCREEN
-			};
+		enum struct WindowMode {
+			WINDOW = GLFW_WINDOW,
+			FULLSCREEN = GLFW_FULLSCREEN
 		};
 
-		Game(int width, int height, WindowMode::Mode);
+		Game(int width, int height, WindowMode);
 		~Game();
 
 		void run();
