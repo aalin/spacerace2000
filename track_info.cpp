@@ -8,7 +8,7 @@
 const unsigned int DETAIL = 5;
 
 TrackInfo::TrackInfo(const std::vector<glm::vec3>& key_points, float width) : _width(width) {
-	TrackLoader track_loader(key_points, DETAIL, width, 0.0);
+	TrackLoader track_loader(key_points, DETAIL, width + 30.0, 0.0);
 
 	_length = 0.0;
 
