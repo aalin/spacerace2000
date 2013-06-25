@@ -1,64 +1,33 @@
 #include "racer_model.hpp"
+#include "triangle.hpp"
 
 RacerModel::RacerModel() {
-	std::vector<Vertex> vertices = generateVertices();
-
-	glGenVertexArrays(1, &_vertex_array_id);
-	glBindVertexArray(_vertex_array_id);
-	glGenBuffers(1, &_vertex_buffer_id);
-	glBindBuffer(GL_ARRAY_BUFFER, _vertex_buffer_id);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
-
-	_size = vertices.size() * sizeof(glm::vec3);
+	_vertex_array = new VertexArray(generateVertices());
 }
 
 RacerModel::~RacerModel() {
-	glDeleteBuffers(1, &_vertex_buffer_id);
-	glDeleteVertexArrays(1, &_vertex_array_id);
+	delete _vertex_array;
 }
 
 void RacerModel::draw() const {
-	glBindBuffer(GL_ARRAY_BUFFER, _vertex_buffer_id);
-
-	unsigned int offset = 0;
-
-	// Position
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offset));
-	offset += sizeof(glm::vec3);
-
-	// Normal
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offset));
-	offset += sizeof(glm::vec3);
-
-	// Color
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offset));
-	offset += sizeof(glm::vec4);
-
-	glDrawArrays(GL_TRIANGLES, 0, _size);
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-    glDisableVertexAttribArray(2);
+	_vertex_array->draw();
 }
 
-void addSimpleTriangle(std::vector<RacerModel::Triangle> &triangles, glm::vec3 a, glm::vec3 b, glm::vec3 c) {
-	triangles.push_back(RacerModel::Triangle{
+void addSimpleTriangle(std::vector<Triangle> &triangles, glm::vec3 a, glm::vec3 b, glm::vec3 c) {
+	triangles.push_back(Triangle{
 		Vertex{a, glm::vec3(), glm::vec4()},
 		Vertex{b, glm::vec3(), glm::vec4()},
 		Vertex{c, glm::vec3(), glm::vec4()},
 	});
 }
 
-void assignSurfaceNormal(RacerModel::Triangle &triangle, glm::vec3 normal) {
+void assignSurfaceNormal(Triangle &triangle, glm::vec3 normal) {
 	triangle.a.normal = normal;
 	triangle.b.normal = normal;
 	triangle.c.normal = normal;
 }
 
-void addTriangleVertices(std::vector<Vertex>& vertices, const RacerModel::Triangle& triangle) {
+void addTriangleVertices(std::vector<Vertex>& vertices, const Triangle& triangle) {
 	vertices.push_back(triangle.a);
 	vertices.push_back(triangle.b);
 	vertices.push_back(triangle.c);
