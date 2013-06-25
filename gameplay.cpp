@@ -13,7 +13,7 @@
 #include <iostream>
 #include <vector>
 
-Gameplay::Gameplay() : _shader(0) {
+Gameplay::Gameplay(Game& game) : GameState(game), _shader(0) {
 }
 
 Gameplay::~Gameplay() {

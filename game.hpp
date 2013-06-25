@@ -3,7 +3,8 @@
 
 #include "opengl.hpp"
 #include <stack>
-#include "game_state.hpp"
+
+class GameState;
 
 class Game {
 	public:
@@ -16,8 +17,15 @@ class Game {
 		~Game();
 
 		void run();
+		void quit();
 
 		void pushState(GameState* state);
+
+		static void glfwKeyCallback(int key, int action) {
+			getInstance().keyboard(key, action);
+		}
+
+		void keyboard(int key, int action);
 
 	private:
 		bool _running;
@@ -25,6 +33,12 @@ class Game {
 
 		void update(double s);
 		void draw();
+
+		static Game* INSTANCE;
+
+		static Game& getInstance() {
+			return *INSTANCE;
+		}
 };
 
 #endif

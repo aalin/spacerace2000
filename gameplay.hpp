@@ -9,13 +9,19 @@ class Racer;
 
 class Gameplay : public GameState {
 	public:
-		Gameplay();
+		Gameplay(Game& game);
 		~Gameplay();
 
 		void setup();
 		void pause();
 		void update(double s);
 		void draw();
+
+		void keyPress(int key) {
+		}
+
+		void keyRelease(int key) {
+		}
 
 	private:
 		Shader* _shader;
