@@ -1,7 +1,6 @@
 #ifndef RACER_MODEL_HPP
 #define RACER_MODEL_HPP
 
-#include "opengl.hpp"
 #include "vertex_array.hpp"
 #include "vertex.hpp"
 #include <vector>

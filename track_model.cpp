@@ -7,7 +7,7 @@
 TrackModel::TrackModel(std::vector<glm::vec3> key_points, float width, float height)
 	: _width(width), _height(height) {
 	_points = Splines(key_points).generate(30);
-	_vertex_array = new VertexArray(generateVertices());
+	_vertex_array = new VertexArray(generateVertices(), VertexArray::PrimitiveType::TRIANGLES);
 }
 
 TrackModel::~TrackModel() {

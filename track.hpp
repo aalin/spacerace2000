@@ -1,7 +1,6 @@
 #ifndef TRACK_HPP
 #define TRACK_HPP
 
-#include "opengl.hpp"
 #include "track_model.hpp"
 #include "track_info.hpp"
 #include <glm/glm.hpp>
@@ -19,8 +18,6 @@ class Track {
 	private:
 		TrackModel _track_model;
 		TrackInfo _track_info;
-
-		unsigned int _size;
 };
 
 #endif

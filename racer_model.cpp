@@ -2,7 +2,7 @@
 #include "triangle.hpp"
 
 RacerModel::RacerModel() {
-	_vertex_array = new VertexArray(generateVertices());
+	_vertex_array = new VertexArray(generateVertices(), VertexArray::PrimitiveType::TRIANGLES);
 }
 
 RacerModel::~RacerModel() {
