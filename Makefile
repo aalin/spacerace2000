@@ -4,7 +4,12 @@ OBJS = $(addsuffix .o, $(FILES))
 CC=clang
 CFLAGS=-Wall -Wextra -ggdb -std=c++11 -stdlib=libstdc++
 
+ifeq ($(shell uname), Darwin)
 LFLAGS=-framework OpenGL -lglfw -lglew -lstdc++
+else
+LFLAGS=-lglfw -lGLEW -lstdc++ -lGL -lm -lX11 -lpthread -lrt -lXrandr
+CFLAGS+=-I/usr/X11/include/
+endif
 
 %.o: %.cpp %.hpp
 	$(CC) -c $(CFLAGS) $< -o $@
