@@ -5,7 +5,6 @@ CC=clang
 CFLAGS=-Wall -Wextra -ggdb -std=c++11 -stdlib=libstdc++
 
 LFLAGS=-framework OpenGL -lglfw -lglew -lstdc++
-CFLAGS+=-I/usr/X11/include/
 
 %.o: %.cpp %.hpp
 	$(CC) -c $(CFLAGS) $< -o $@
