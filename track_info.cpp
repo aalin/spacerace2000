@@ -6,9 +6,10 @@
 #include "track_loader.hpp"
 
 const unsigned int DETAIL = 5;
+const float GENEROUSITY = 30.0; // How far outside the track the player can be without being "off track"
 
 TrackInfo::TrackInfo(const std::vector<glm::vec3>& key_points, float width) : _width(width) {
-	TrackLoader track_loader(key_points, DETAIL, width + 30.0, 0.0);
+	TrackLoader track_loader(key_points, DETAIL, width + GENEROUSITY, 0.0);
 
 	_length = 0.0;
 
