@@ -142,13 +142,9 @@ void Gameplay::draw() {
 	model_matrix = glm::rotate(model_matrix, _racer->getDirection() + 90.0f, glm::vec3(0.0, 0.0, 1.0));
 	model_matrix = glm::rotate(model_matrix, _racer->getTurnRatio() * 25.0f, glm::vec3(0.0, 1.0, 0.0));
 
-	model_view_matrix = view_matrix * model_matrix;
 	model_view_projection_matrix = projection_matrix * view_matrix * model_matrix;
-	normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_view_matrix)));
 
-	//glUniformMatrix4fv(_model_view_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_matrix));
 	glUniformMatrix4fv(_model_view_projection_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
-	// glUniformMatrix3fv(_normal_matrix_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));
 
 	_racer->draw();
 }
