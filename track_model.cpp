@@ -4,9 +4,11 @@
 
 #include <glm/gtc/constants.hpp>
 
+const unsigned int DETAIL = 20;
+
 TrackModel::TrackModel(std::vector<glm::vec3> key_points, float width, float height) {
 	_vertex_array = new VertexArray(
-		generateVertices(TrackLoader(key_points, width, height)),
+		generateVertices(TrackLoader(key_points, DETAIL, width, height)),
 		VertexArray::PrimitiveType::TRIANGLES
 	);
 }

@@ -56,9 +56,6 @@ class TrackInfo {
 		const PointInfo& getPointInfo(unsigned int i) const {
 			return _point_information[i % _point_information.size()];
 		}
-
-		glm::vec3 getPoint(const std::vector<glm::vec3> points, unsigned int i) const;
-		LeftRight pointVertices(const std::vector<glm::vec3> points, unsigned int i) const;
 };
 
 #endif

@@ -1,23 +1,23 @@
 #include "track_info.hpp"
-#include "splines.hpp"
 
 #include <glm/gtx/closest_point.hpp>
 #include <algorithm>
 
+#include "track_loader.hpp"
+
 const unsigned int DETAIL = 5;
 
-
 TrackInfo::TrackInfo(const std::vector<glm::vec3>& key_points, float width) : _width(width) {
-	std::vector<glm::vec3> points(Splines(key_points).generate(DETAIL));
+	TrackLoader track_loader(key_points, DETAIL, width, 0.0);
 
 	_length = 0.0;
 
-	for(unsigned int i = 0; i < points.size(); i++) {
-		glm::vec3 p0 = getPoint(points, i);
-		glm::vec3 p1 = getPoint(points, i + 1);
+	for(unsigned int i = 0; i < track_loader.numSectionRects(); i++) {
+		TrackLoader::SectionRect current = track_loader.getSectionRect(i);
+		TrackLoader::SectionRect next = track_loader.getSectionRect(i + 1);
 
-		LeftRight lr0 = pointVertices(points, i);
-		LeftRight lr1 = pointVertices(points, i + 1);
+		glm::vec3 p0 = track_loader.getPoint(i);
+		glm::vec3 p1 = track_loader.getPoint(i + 1);
 
 		PointInfo point_info;
 		point_info.index = 0.0;
@@ -26,10 +26,10 @@ TrackInfo::TrackInfo(const std::vector<glm::vec3>& key_points, float width) : _w
 		point_info.distance_to_next = glm::distance(p0, p1);
 		point_info.angle = 0.0; // TODO: fix this
 
-		point_info.left0 = lr0.left;
-		point_info.right0 = lr0.right;
-		point_info.left1 = lr1.left;
-		point_info.right1 = lr1.right;
+		point_info.left0 = current.top_left;
+		point_info.right0 = current.top_right;
+		point_info.left1 = next.top_left;
+		point_info.right1 = next.top_right;
 
 		_point_information.push_back(point_info);
 
@@ -92,22 +92,4 @@ unsigned int TrackInfo::indexAt(float distance) const {
 		if(_point_information[i].distance > distance)
 			return i - 1;
 	return 0;
-}
-
-glm::vec3 TrackInfo::getPoint(const std::vector<glm::vec3> points, unsigned int i) const {
-	return points[i % points.size()];
-}
-
-TrackInfo::LeftRight TrackInfo::pointVertices(const std::vector<glm::vec3> points, unsigned int i) const {
-	glm::vec3 p0(getPoint(points, i));
-	glm::vec3 p1(getPoint(points, i + 1));
-
-	glm::vec3 delta(p0 - p1);
-
-	glm::vec3 outwards(glm::normalize(glm::vec3(delta.y, -delta.x, 0)));
-
-	glm::vec3 left(p0 + outwards * -_width);
-	glm::vec3 right(p0 + outwards * _width);
-
-	return { left, right };
 }
