@@ -9,7 +9,7 @@ class VertexArray {
 	public:
 		enum struct PrimitiveType {
 			POINTS = GL_POINTS,
-			LINE_STRIP = GL_LINES,
+			LINES = GL_LINES,
 			TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
 			TRIANGLES = GL_TRIANGLES
 		};
