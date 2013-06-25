@@ -7,6 +7,11 @@
 TrackModel::TrackModel(std::vector<glm::vec3> key_points, float width, float height)
 	: _width(width), _height(height) {
 	_points = Splines(key_points).generate(30);
+	_vertex_array = new VertexArray(generateVertices());
+}
+
+TrackModel::~TrackModel() {
+	delete _vertex_array;
 }
 
 std::vector<Vertex> TrackModel::generateVertices() const {
@@ -34,8 +39,8 @@ std::vector<Vertex> TrackModel::generateVertices() const {
 		LeftRight lr0 = pointVertices(i);
 		LeftRight lr1 = pointVertices(i + 1);
 
-		glm::vec4 color0 = colorAt(i);
-		glm::vec4 color1 = colorAt(i + 1);
+		glm::vec4 color0 = colorAt(i / static_cast<float>(_points.size()));
+		glm::vec4 color1 = colorAt((i + 1) / static_cast<float>(_points.size()));
 
 		// Top
 		glm::vec3 top_normal0 = vertexNormal(top_surface_normals, i);
@@ -147,9 +152,7 @@ glm::vec3 TrackModel::vertexNormal(const std::vector<glm::vec3>& surface_normals
 	return glm::normalize(normal);
 }
 
-glm::vec4 TrackModel::colorAt(unsigned int i) const {
-	float x = i / static_cast<float>(_points.size());
-
+glm::vec4 TrackModel::colorAt(float x) const {
 	return glm::vec4(
 		std::pow(std::sin((x + 0) * glm::pi<float>() + 0 / 3.0 * glm::pi<float>()), 2),
 		std::pow(std::sin((x + 1) * glm::pi<float>() + 1 / 3.0 * glm::pi<float>()), 2),

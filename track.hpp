@@ -2,6 +2,7 @@
 #define TRACK_HPP
 
 #include "opengl.hpp"
+#include "track_model.hpp"
 #include "track_info.hpp"
 #include <glm/glm.hpp>
 #include <vector>
@@ -9,7 +10,6 @@
 class Track {
 	public:
 		Track(std::vector<glm::vec3> points);
-		~Track();
 
 		void draw() const;
 
@@ -17,9 +17,7 @@ class Track {
 		float distanceNear(float distance, glm::vec3 position) const { return _track_info.distanceNear(distance, position); }
 
 	private:
-		GLuint _vertex_buffer_id;
-		GLuint _vertex_array_id;
-
+		TrackModel _track_model;
 		TrackInfo _track_info;
 
 		unsigned int _size;
