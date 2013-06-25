@@ -4,6 +4,7 @@
 #include <vector>
 #include "vertex_array.hpp"
 #include "triangle.hpp"
+#include "track_loader.hpp"
 
 class TrackModel {
 	public:
@@ -20,12 +21,9 @@ class TrackModel {
 		}
 
 	private:
-		const float _width;
-		const float _height;
-
 		VertexArray* _vertex_array;
 
-		std::vector<Vertex> generateVertices() const;
+		std::vector<Vertex> generateVertices(const TrackLoader&) const;
 
 		std::vector<glm::vec3> _points;
 
@@ -34,7 +32,6 @@ class TrackModel {
 		}
 
 		LeftRight pointVertices(unsigned int i) const;
-		glm::vec3 bottomOf(glm::vec3) const;
 
 		void pushTriangle(std::vector<Vertex>& vertices, const Triangle& t) const;
 

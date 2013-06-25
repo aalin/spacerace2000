@@ -1,9 +1,12 @@
 #include "vertex.hpp"
 #include "vertex_array.hpp"
+#include <iostream>
 
 VertexArray::VertexArray(const std::vector<Vertex>& vertices, PrimitiveType primitive_type) {
 	_mode = static_cast<GLenum>(primitive_type);
 	_size = vertices.size();
+
+	std::cout << "Creating vertex array with " << _size << " vertices" << std::endl;
 
 	glGenVertexArrays(1, &_vertex_array_id);
 	glBindVertexArray(_vertex_array_id);
