@@ -25,7 +25,6 @@ Game::Game(int width, int height, Game::WindowMode window_mode) {
 
 	glfwSetKeyCallback(&Game::glfwKeyCallback);
 
-	glPrintErrors();
 	glewExperimental = GL_TRUE;
 	int glew_status = glewInit();
 	glPrintErrors();

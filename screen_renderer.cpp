@@ -11,16 +11,13 @@ const float vertices[] = {
 };
 
 ScreenRenderer::ScreenRenderer() {
-	glPrintErrors();
 	_shader = new Shader("shaders/game");
-	glPrintErrors();
 
 	glGenVertexArrays(1, &_vertex_array_id);
 	glBindVertexArray(_vertex_array_id);
 	glGenBuffers(1, &_vertex_buffer_id);
 	glBindBuffer(GL_ARRAY_BUFFER, _vertex_buffer_id);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glPrintErrors();
 }
 
 ScreenRenderer::~ScreenRenderer() {

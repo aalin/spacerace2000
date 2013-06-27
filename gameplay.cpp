@@ -22,7 +22,6 @@ Gameplay::~Gameplay() {
 }
 
 void Gameplay::setup() {
-	glPrintErrors();
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
@@ -30,7 +29,6 @@ void Gameplay::setup() {
 	glCullFace(GL_BACK);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	glPrintErrors();
 	_framebuffer = new Framebuffer(800, 600);
 
 	_shader = new Shader("shaders/lighting");
@@ -110,7 +108,6 @@ void Gameplay::update(double s) {
 
 void Gameplay::draw() {
 	_framebuffer->bindFramebuffer();
-	glPrintErrors();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
