@@ -6,6 +6,7 @@
 class Shader;
 class Track;
 class Racer;
+class Framebuffer;
 
 class Gameplay : public GameState {
 	public:
@@ -26,6 +27,7 @@ class Gameplay : public GameState {
 		}
 
 	private:
+		Framebuffer* _framebuffer;
 		Shader* _shader;
 		Track* _track;
 		Racer* _racer;

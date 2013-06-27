@@ -22,12 +22,16 @@ Gameplay::~Gameplay() {
 }
 
 void Gameplay::setup() {
+	glPrintErrors();
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glPrintErrors();
+	_framebuffer = new Framebuffer(800, 600);
 
 	_shader = new Shader("shaders/lighting");
 	_shader->use();
@@ -105,6 +109,9 @@ void Gameplay::update(double s) {
 }
 
 void Gameplay::draw() {
+	_framebuffer->bindFramebuffer();
+	glPrintErrors();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	_shader->use();
@@ -147,4 +154,7 @@ void Gameplay::draw() {
 	glUniformMatrix4fv(_model_view_projection_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
 
 	_racer->draw();
+
+	_framebuffer->unbindFramebuffer();
+	_framebuffer->bindTexture();
 }

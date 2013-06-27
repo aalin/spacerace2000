@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "gameplay.hpp"
 #include "menu.hpp"
+#include "screen_renderer.hpp"
 
 Game* Game::INSTANCE = 0;
 
@@ -32,6 +33,9 @@ Game::Game(int width, int height, Game::WindowMode window_mode) {
 		std::cerr << "GLEW error: " << glewGetErrorString(glew_status) << std::endl;
 		throw("GLEW could not be initialized.");
 	}
+
+	glPrintErrors();
+	_screen_renderer = new ScreenRenderer();
 }
 
 Game::~Game() {
@@ -47,7 +51,7 @@ void Game::run() {
 
 	double last_time = glfwGetTime();
 
-	pushState(new Menu(*this));
+	pushState(new Gameplay(*this));
 
 	while(_running) {
 		double current_time = glfwGetTime();
@@ -74,8 +78,11 @@ void Game::update(double s) {
 }
 
 void Game::draw() {
-	if(!_states.empty())
+	if(!_states.empty()) {
 		_states.top()->draw();
+		_screen_renderer->draw();
+	}
+
 	glfwSwapBuffers();
 }
 

@@ -8,6 +8,10 @@ class Framebuffer {
 		Framebuffer(unsigned int width, unsigned int height);
 		~Framebuffer();
 
+		void bindFramebuffer() const;
+		void unbindFramebuffer() const;
+		void bindTexture() const;
+
 	private:
 		GLuint _texture_id;
 		GLuint _renderbuffer_id;

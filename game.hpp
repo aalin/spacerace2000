@@ -5,6 +5,7 @@
 #include <stack>
 
 class GameState;
+class ScreenRenderer;
 
 class Game {
 	public:
@@ -40,6 +41,8 @@ class Game {
 		static Game& getInstance() {
 			return *INSTANCE;
 		}
+
+		ScreenRenderer* _screen_renderer;
 };
 
 #endif
