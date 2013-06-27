@@ -34,13 +34,14 @@ Game::Game(int width, int height, Game::WindowMode window_mode) {
 		throw("GLEW could not be initialized.");
 	}
 
-	glPrintErrors();
 	_screen_renderer = new ScreenRenderer();
 }
 
 Game::~Game() {
 	while(!_states.empty())
 		popState();
+
+	delete _screen_renderer;
 
 	std::cout << "Game::~Game();" << std::endl;
 	glfwTerminate();
@@ -95,6 +96,9 @@ void Game::pushState(GameState* state) {
 
 void Game::popState() {
 	_states.pop();
+
+	if(_states.empty())
+		quit();
 }
 
 void Game::keyboard(int key, int action) {
