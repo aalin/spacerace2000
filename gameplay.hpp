@@ -2,6 +2,7 @@
 #define GAMEPLAY_HPP
 
 #include "game_state.hpp"
+#include <glm/glm.hpp>
 
 class Shader;
 class Track;
@@ -35,6 +36,14 @@ class Gameplay : public GameState {
 		GLuint _model_view_projection_matrix_location;
 		GLuint _model_view_matrix_location;
 		GLuint _normal_matrix_location;
+
+		glm::mat4 setupCamera() const;
+		void setupMatrices();
+		void uploadMvpMatrix();
+
+		glm::mat4 projection_matrix;
+		glm::mat4 view_matrix;
+		glm::mat4 model_matrix;
 };
 
 #endif

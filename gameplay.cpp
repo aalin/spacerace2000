@@ -5,7 +5,6 @@
 #include "track.hpp"
 #include "racer.hpp"
 
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/rotate_vector.hpp>
@@ -106,15 +105,7 @@ void Gameplay::update(double s) {
 	_racer->update(s, *_track);
 }
 
-void Gameplay::draw() {
-	_framebuffer->bindFramebuffer();
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	_shader->use();
-
-	glm::mat4 projection_matrix = glm::perspective(30.0f, 4.0f / 3.0f, 0.1f, 2000.0f);
-
+glm::mat4 Gameplay::setupCamera() const {
 	const float dir = _racer->getDirection();
 	const float camera_distance = 50.0f;
 
@@ -124,21 +115,40 @@ void Gameplay::draw() {
 		glm::vec3(0.0, 0.0, 3.0)
 	);
 
-	glm::mat4 view_matrix = glm::lookAt(
+	return glm::lookAt(
 		camera_position,
 		_racer->getPosition(),
 		glm::vec3(0.0, 0.0, 1.0)
 	);
+}
 
-	glm::mat4 model_matrix(1.0);
+void Gameplay::setupMatrices() {
+	projection_matrix = glm::perspective(30.0f, 4.0f / 3.0f, 0.1f, 2000.0f);
+	view_matrix = setupCamera();
+	model_matrix = glm::mat4(1.0);
 
 	glm::mat4 model_view_matrix = view_matrix * model_matrix;
-	glm::mat4 model_view_projection_matrix = projection_matrix * view_matrix * model_matrix;
 	glm::mat3 normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_view_matrix)));
 
 	glUniformMatrix4fv(_model_view_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_matrix));
-	glUniformMatrix4fv(_model_view_projection_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
 	glUniformMatrix3fv(_normal_matrix_location, 1, GL_FALSE, glm::value_ptr(normal_matrix));
+
+	uploadMvpMatrix();
+}
+
+void Gameplay::uploadMvpMatrix() {
+	glm::mat4 model_view_projection_matrix = projection_matrix * view_matrix * model_matrix;
+	glUniformMatrix4fv(_model_view_projection_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
+}
+
+void Gameplay::draw() {
+	_framebuffer->bindFramebuffer();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	_shader->use();
+
+	setupMatrices();
 
 	_track->draw();
 
@@ -146,9 +156,7 @@ void Gameplay::draw() {
 	model_matrix = glm::rotate(model_matrix, _racer->getDirection() + 90.0f, glm::vec3(0.0, 0.0, 1.0));
 	model_matrix = glm::rotate(model_matrix, _racer->getTurnRatio() * 25.0f, glm::vec3(0.0, 1.0, 0.0));
 
-	model_view_projection_matrix = projection_matrix * view_matrix * model_matrix;
-
-	glUniformMatrix4fv(_model_view_projection_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
+	uploadMvpMatrix();
 
 	_racer->draw();
 
