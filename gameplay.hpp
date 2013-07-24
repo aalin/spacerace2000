@@ -3,6 +3,7 @@
 
 #include "game_state.hpp"
 #include <glm/glm.hpp>
+#include <functional>
 
 class Shader;
 class Track;
@@ -40,6 +41,9 @@ class Gameplay : public GameState {
 		glm::mat4 setupCamera() const;
 		void setupMatrices();
 		void uploadMvpMatrix();
+
+		template<typename F>
+		void changeModelMatrix(F&);
 
 		glm::mat4 projection_matrix;
 		glm::mat4 view_matrix;

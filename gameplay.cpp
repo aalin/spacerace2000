@@ -4,6 +4,7 @@
 #include "shader.hpp"
 #include "track.hpp"
 #include "racer.hpp"
+#include "change_model_matrix.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -136,6 +137,12 @@ void Gameplay::setupMatrices() {
 	uploadMvpMatrix();
 }
 
+template<typename F>
+void Gameplay::changeModelMatrix(F &lambda) {
+	ChangeModelMatrix change_matrix(projection_matrix, view_matrix, model_matrix, _model_view_projection_matrix_location);
+	lambda(change_matrix);
+}
+
 void Gameplay::uploadMvpMatrix() {
 	glm::mat4 model_view_projection_matrix = projection_matrix * view_matrix * model_matrix;
 	glUniformMatrix4fv(_model_view_projection_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
@@ -152,11 +159,12 @@ void Gameplay::draw() {
 
 	_track->draw();
 
-	model_matrix = glm::translate(model_matrix, _racer->getPosition());
-	model_matrix = glm::rotate(model_matrix, _racer->getDirection() + 90.0f, glm::vec3(0.0, 0.0, 1.0));
-	model_matrix = glm::rotate(model_matrix, _racer->getTurnRatio() * 25.0f, glm::vec3(0.0, 1.0, 0.0));
-
-	uploadMvpMatrix();
+	{
+		ChangeModelMatrix matrix(projection_matrix, view_matrix, model_matrix, _model_view_projection_matrix_location);
+		matrix.translate(_racer->getPosition());
+		matrix.rotate(_racer->getDirection() + 90.0f, glm::vec3(0.0, 0.0, 1.0));
+		matrix.rotate(_racer->getTurnRatio() * 25.0f, glm::vec3(0.0, 1.0, 0.0));
+	}
 
 	_racer->draw();
 
