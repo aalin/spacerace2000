@@ -29,7 +29,7 @@ void Gameplay::setup() {
 	glCullFace(GL_BACK);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	_framebuffer = new Framebuffer(800, 600);
+	_framebuffer = new Framebuffer(1024, 768);
 
 	_shader = new Shader("shaders/lighting");
 	_shader->use();
