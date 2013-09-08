@@ -5,9 +5,11 @@
 #include "track_info.hpp"
 #include <glm/glm.hpp>
 #include <vector>
+#include <string>
 
 class Track {
 	public:
+		Track(std::string filename);
 		Track(std::vector<glm::vec3> points);
 
 		void draw() const;
