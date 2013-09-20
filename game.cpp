@@ -51,7 +51,7 @@ void Game::run() {
 
 	double last_time = glfwGetTime();
 
-	pushState(new Menu(*this));
+	pushState(new Gameplay(*this));
 
 	while(_running) {
 		double current_time = glfwGetTime();
