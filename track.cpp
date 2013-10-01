@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-const float WIDTH = 10.0f;
+const float WIDTH = 30.0f;
 const float HEIGHT = 4.0f;
 
 std::vector<glm::vec3> loadPointsFromFile(std::string filename) {
