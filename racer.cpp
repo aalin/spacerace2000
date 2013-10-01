@@ -9,7 +9,7 @@ const float Racer::TURN_SPEED = 10.0;
 const float Racer::TURN_LIMIT = 150.0;
 
 Racer::Racer(glm::vec3 position) {
-	_direction = 120.0;
+	_direction = 190.0;
 	_speed = 100.0;
 	_turning = 0.0;
 	_distance = 0.0;
