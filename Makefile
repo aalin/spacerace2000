@@ -5,7 +5,7 @@ CC=clang
 CFLAGS=-Wall -Wextra -ggdb -std=c++11 -stdlib=libstdc++
 
 ifeq ($(shell uname), Darwin)
-LFLAGS=-framework OpenGL -lglfw -lglew -lstdc++
+LFLAGS=-framework OpenGL -lglfw -lglew -lstdc++ -stdlib=libstdc++
 else
 LFLAGS=-lglfw -lGLEW -lstdc++ -lGL -lm -lX11 -lpthread -lrt -lXrandr
 CFLAGS+=-I/usr/X11/include/
