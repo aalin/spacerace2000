@@ -3,13 +3,14 @@
 
 #include "racer_model.hpp"
 #include "track.hpp"
+#include "game.hpp"
 
 class Racer {
 	public:
 		Racer(glm::vec3 position);
 		~Racer();
 
-		void update(double s, const Track& track);
+		void update(double s, const Track& track, const Game& game);
 		void draw() const;
 
 		void setPosition(glm::vec3 position) { _position = position; }

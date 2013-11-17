@@ -3,6 +3,7 @@
 
 #include "opengl.hpp"
 #include <stack>
+#include <iostream>
 
 class GameState;
 class ScreenRenderer;
@@ -10,11 +11,11 @@ class ScreenRenderer;
 class Game {
 	public:
 		enum struct WindowMode {
-			WINDOW = GLFW_WINDOW,
-			FULLSCREEN = GLFW_FULLSCREEN
+			WINDOW,
+			FULLSCREEN
 		};
 
-		Game(int width, int height, WindowMode);
+		Game(int width, int height, WindowMode mode);
 		~Game();
 
 		void run();
@@ -23,11 +24,15 @@ class Game {
 		void pushState(GameState* state);
 		void popState();
 
-		static void glfwKeyCallback(int key, int action) {
+		static void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 			getInstance().keyboard(key, action);
 		}
 
+		static void glfwErrorCallback(int error, const char* description);
+
 		void keyboard(int key, int action);
+
+		bool isKeyPressed(int key) const { bool asd = glfwGetKey(_window, key) == GLFW_PRESS;std::cout << asd<<std::endl; return asd; }
 
 	private:
 		bool _running;
@@ -43,6 +48,7 @@ class Game {
 		}
 
 		ScreenRenderer* _screen_renderer;
+		GLFWwindow* _window;
 };
 
 #endif

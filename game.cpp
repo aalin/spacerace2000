@@ -1,4 +1,6 @@
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include "game.hpp"
 #include "gameplay.hpp"
 #include "menu.hpp"
@@ -6,28 +8,39 @@
 
 Game* Game::INSTANCE = 0;
 
-Game::Game(int width, int height, Game::WindowMode window_mode) {
+void Game::glfwErrorCallback(int error, const char* description) {
+	std::cerr << "\e[33mGLFW: " << error << ": " << description << "\e[0m" << std::endl;
+}
+
+Game::Game(int width, int height, Game::WindowMode mode) {
 	Game::INSTANCE = this;
+	glfwSetErrorCallback(&Game::glfwErrorCallback);
 
 	if(!glfwInit())
 		throw "GLFW could not be initialized.";
 
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
-	glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwOpenWindowHint(GLFW_WINDOW_NO_RESIZE, GL_TRUE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-	glfwOpenWindowHint(GLFW_FSAA_SAMPLES, 4);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
-	if(!glfwOpenWindow(width, height, 0, 0, 0, 0, 16, 0, static_cast<int>(window_mode)))
+	_window = glfwCreateWindow(width, height, "Hello World", 0, 0);
+
+	if(!_window)
 		throw "GLFW window could not be opened.";
 
-	glfwSetKeyCallback(&Game::glfwKeyCallback);
+	glfwMakeContextCurrent(_window);
+
+	glfwSetKeyCallback(_window, &Game::glfwKeyCallback);
 
 	glewExperimental = GL_TRUE;
 	int glew_status = glewInit();
 	glPrintErrors();
+
 	if(glew_status != GLEW_OK) {
 		std::cerr << "GLEW error: " << glewGetErrorString(glew_status) << std::endl;
 		throw("GLEW could not be initialized.");
@@ -56,7 +69,7 @@ void Game::run() {
 	while(_running) {
 		double current_time = glfwGetTime();
 
-		if(glfwGetKey(GLFW_KEY_SPACE))
+		if(glfwGetKey(_window, GLFW_KEY_SPACE))
 			update(0.0);
 		else
 			update(current_time - last_time);
@@ -64,7 +77,8 @@ void Game::run() {
 
 		last_time = current_time;
 
-		glfwSleep(0.001);
+		//std::chrono::milliseconds duration(10);
+		//std::this_thread::sleep_for(duration);
 	}
 }
 
@@ -83,7 +97,8 @@ void Game::draw() {
 		_screen_renderer->draw();
 	}
 
-	glfwSwapBuffers();
+	std::cout << "drawing" << std::endl;
+	glfwSwapBuffers(_window);
 }
 
 void Game::pushState(GameState* state) {
