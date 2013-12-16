@@ -19,11 +19,11 @@ Racer::Racer(glm::vec3 position) {
 Racer::~Racer() {
 }
 
-void Racer::update(double s, const Track& track, const Game& game) {
+void Racer::update(double s, const Track& track) {
 	int turn = 0;
-	if(game.isKeyPressed(GLFW_KEY_LEFT))
+	if(glfwGetKey(GLFW_KEY_LEFT) == GLFW_PRESS)
 		turn -= 1;
-	if(game.isKeyPressed(GLFW_KEY_RIGHT))
+	if(glfwGetKey(GLFW_KEY_RIGHT) == GLFW_PRESS)
 		turn += 1;
 
 	if(turn == 0) {

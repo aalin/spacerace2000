@@ -21,7 +21,7 @@ class Gameplay : public GameState {
 		void draw();
 
 		void keyPress(int key) {
-			if(key == GLFW_KEY_ESCAPE)
+			if(key == GLFW_KEY_ESC)
 				getGame().popState();
 		}
 

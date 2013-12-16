@@ -2,7 +2,7 @@
 #define GLERROR_H
 
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <GL/glfw.h>
 
 #ifdef __APPLE__
 #include <OpenGL/gl.h>

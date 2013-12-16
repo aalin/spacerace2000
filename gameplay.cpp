@@ -52,7 +52,7 @@ void Gameplay::pause() {
 }
 
 void Gameplay::update(double s) {
-	_racer->update(s, *_track, getGame());
+	_racer->update(s, *_track);
 }
 
 glm::mat4 Gameplay::setupCamera() const {
