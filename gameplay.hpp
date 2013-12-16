@@ -4,7 +4,9 @@
 #include "game_state.hpp"
 #include <glm/glm.hpp>
 #include <functional>
+#include <algorithm>
 
+#include "change_model_matrix.hpp"
 class Shader;
 class Track;
 class Racer;
@@ -42,8 +44,7 @@ class Gameplay : public GameState {
 		void setupMatrices();
 		void uploadMvpMatrix();
 
-		template<typename F>
-		void changeModelMatrix(F&);
+		void changeModelMatrix(std::function<void(ChangeModelMatrix&)>);
 
 		glm::mat4 projection_matrix;
 		glm::mat4 view_matrix;
