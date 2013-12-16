@@ -73,11 +73,11 @@ glm::mat4 Gameplay::setupCamera() const {
 }
 
 void Gameplay::setupMatrices() {
-	projection_matrix = glm::perspective(30.0f, 4.0f / 3.0f, 0.1f, 2000.0f);
-	view_matrix = setupCamera();
-	model_matrix = glm::mat4(1.0);
+	_projection_matrix = glm::perspective(30.0f, 4.0f / 3.0f, 0.1f, 2000.0f);
+	_view_matrix = setupCamera();
+	_model_matrix = glm::mat4(1.0);
 
-	glm::mat4 model_view_matrix = view_matrix * model_matrix;
+	glm::mat4 model_view_matrix = _view_matrix * _model_matrix;
 	glm::mat3 normal_matrix = glm::transpose(glm::inverse(glm::mat3(model_view_matrix)));
 
 	glUniformMatrix4fv(_model_view_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_matrix));
@@ -87,12 +87,12 @@ void Gameplay::setupMatrices() {
 }
 
 void Gameplay::changeModelMatrix(std::function<void(ChangeModelMatrix&)> lambda) {
-	ChangeModelMatrix change_matrix(projection_matrix, view_matrix, model_matrix, _model_view_projection_matrix_location);
+	ChangeModelMatrix change_matrix(_projection_matrix, _view_matrix, _model_matrix, _model_view_projection_matrix_location);
 	lambda(change_matrix);
 }
 
 void Gameplay::uploadMvpMatrix() {
-	glm::mat4 model_view_projection_matrix = projection_matrix * view_matrix * model_matrix;
+	glm::mat4 model_view_projection_matrix = _projection_matrix * _view_matrix * _model_matrix;
 	glUniformMatrix4fv(_model_view_projection_matrix_location, 1, GL_FALSE, glm::value_ptr(model_view_projection_matrix));
 }
 

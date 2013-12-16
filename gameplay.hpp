@@ -1,12 +1,12 @@
 #ifndef GAMEPLAY_HPP
 #define GAMEPLAY_HPP
 
+#include "change_model_matrix.hpp"
 #include "game_state.hpp"
 #include <glm/glm.hpp>
 #include <functional>
 #include <algorithm>
 
-#include "change_model_matrix.hpp"
 class Shader;
 class Track;
 class Racer;
@@ -46,9 +46,9 @@ class Gameplay : public GameState {
 
 		void changeModelMatrix(std::function<void(ChangeModelMatrix&)>);
 
-		glm::mat4 projection_matrix;
-		glm::mat4 view_matrix;
-		glm::mat4 model_matrix;
+		glm::mat4 _projection_matrix;
+		glm::mat4 _view_matrix;
+		glm::mat4 _model_matrix;
 };
 
 #endif
