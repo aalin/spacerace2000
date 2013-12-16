@@ -2,10 +2,10 @@ FILES = main game game_state gameplay framebuffer shader opengl splines track tr
 OBJS = $(addsuffix .o, $(FILES))
 
 CC=clang
-CFLAGS=-Wall -Wextra -ggdb -std=c++11 -stdlib=libstdc++
+CFLAGS=-Wall -Wextra -ggdb -std=c++11 -stdlib=libc++
 
 ifeq ($(shell uname), Darwin)
-LFLAGS=-framework OpenGL -lglfw -lglew -lstdc++ -stdlib=libstdc++
+LFLAGS=-framework OpenGL -lglfw -lglew -lstdc++ -stdlib=libc++
 else
 LFLAGS=-lglfw -lGLEW -lstdc++ -lGL -lm -lX11 -lpthread -lrt -lXrandr
 CFLAGS+=-I/usr/X11/include/
