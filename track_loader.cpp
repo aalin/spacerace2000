@@ -17,12 +17,22 @@ float magnitude(const glm::vec2 v) {
 }
 
 float calculateDegrees(const glm::vec3 prev, const glm::vec3 curr, const glm::vec3 next) {
-	return 0.0;
+	const glm::vec3 f_1 = next - curr;
+	const glm::vec3 f_2 = curr - prev;
+
+	double scalarprod = glm::dot(f_1, f_2);
+	double abs_f1 = glm::length(f_1);
+	double abs_f2 = glm::length(f_2);
+	double cos_alpha = scalarprod/(abs_f1*abs_f2);
+	double alpha = std::acos(cos_alpha);
+
+	return glm::degrees(alpha);
 }
 
 TrackLoader::SectionRect TrackLoader::generateSectionRect(unsigned int i) const {
 	const glm::vec3 current(getPoint(i));;
 	const glm::vec3 next(getPoint(i + 1));
+	const glm::vec3 prev(getPoint(i - 1));
 
 	const glm::vec3 delta(current - next);
 	const glm::vec3 forward(glm::normalize(delta));
@@ -35,10 +45,11 @@ TrackLoader::SectionRect TrackLoader::generateSectionRect(unsigned int i) const 
 	glm::vec4 bottom_left(top_left - height);
 	glm::vec4 bottom_right(top_right - height);
 
-	float degrees = calculateDegrees(getPoint(i - 1), current, next);
+	float degrees = calculateDegrees(prev, current, next);
 
 	glm::mat4 translation = glm::translate(glm::mat4(1.0), current);
-	glm::mat4 rotation = glm::rotate(glm::mat4(1.0), degrees, forward);
+	float scale_factor = -12.0;
+	glm::mat4 rotation = glm::rotate(glm::mat4(1.0), degrees * scale_factor, forward);
 
 	glm::mat4 final = translation * rotation;
 

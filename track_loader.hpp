@@ -23,7 +23,9 @@ class TrackLoader {
 			return _section_rects.size();
 		}
 
-		glm::vec3 getPoint(unsigned int i) const {
+		glm::vec3 getPoint(int i) const {
+			while(i < 0)
+				i += _points.size();
 			return _points[i % _points.size()];
 		}
 
