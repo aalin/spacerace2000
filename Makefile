@@ -28,4 +28,4 @@ game: $(OBJS)
 clean:
 	rm -f *.o game
 
-.PHONY: all run clean
+.PHONY: all demo clean

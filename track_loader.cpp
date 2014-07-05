@@ -1,11 +1,13 @@
 #include "track_loader.hpp"
 #include "splines.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 TrackLoader::TrackLoader(std::vector<glm::vec3> key_points, unsigned int detail, float width, float height)
 	: _width(width), _height(height) {
 	_points = Splines(key_points).generate(detail);
 
+	std::cout << "Number of points: " << _points.size() << std::endl;
 	for(unsigned int i = 0; i < _points.size(); i++)
 		_section_rects.push_back(generateSectionRect(i));
 }

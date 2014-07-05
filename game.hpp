@@ -2,6 +2,7 @@
 #define GAME_HPP
 
 #include "opengl.hpp"
+#include "key_state.hpp"
 #include <stack>
 
 class GameState;
@@ -31,6 +32,8 @@ class Game {
 
 	private:
 		bool _running;
+		bool _paused;
+		KeyState _space_key_state;
 		std::stack<GameState*> _states;
 
 		void update(double s);
