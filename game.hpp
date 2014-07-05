@@ -33,7 +33,10 @@ class Game {
 	private:
 		bool _running;
 		bool _paused;
+		float _game_speed;
+
 		KeyState _space_key_state;
+		KeyState _z_key_state, _x_key_state;
 		std::stack<GameState*> _states;
 
 		void update(double s);

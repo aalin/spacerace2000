@@ -49,6 +49,7 @@ Game::~Game() {
 void Game::run() {
 	_running = true;
 	_paused = false;
+	_game_speed = 1.0;
 
 	double last_time = glfwGetTime();
 
@@ -60,7 +61,7 @@ void Game::run() {
 		if(_paused)
 			update(0.0);
 		else
-			update(current_time - last_time);
+			update((current_time - last_time) * _game_speed);
 		draw();
 
 		last_time = current_time;
@@ -75,11 +76,17 @@ void Game::quit() {
 
 void Game::update(double s) {
 	_space_key_state.update(glfwGetKey(GLFW_KEY_SPACE));
-
+	_z_key_state.update(glfwGetKey('Z'));
+	_x_key_state.update(glfwGetKey('X'));
 
 	// Toggle pause when space is pressed.
 	if(_space_key_state.getState() == KeyState::State::PRESSED)
 		_paused = !_paused;
+
+	if(_z_key_state.getState() == KeyState::State::PRESSED)
+		_game_speed /= 2.0;
+	if(_x_key_state.getState() == KeyState::State::PRESSED)
+		_game_speed *= 2.0;
 
 	if(!_states.empty())
 		_states.top()->update(s);
