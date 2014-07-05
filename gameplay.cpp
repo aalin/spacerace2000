@@ -87,7 +87,13 @@ void Gameplay::setupMatrices() {
 }
 
 void Gameplay::changeModelMatrix(std::function<void(ChangeModelMatrix&)> lambda) {
-	ChangeModelMatrix change_matrix(_projection_matrix, _view_matrix, _model_matrix, _model_view_projection_matrix_location);
+	ChangeModelMatrix change_matrix(
+		_projection_matrix,
+		_view_matrix,
+		_model_matrix,
+		_model_view_projection_matrix_location
+	);
+
 	lambda(change_matrix);
 }
 
