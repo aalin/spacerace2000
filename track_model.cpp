@@ -138,6 +138,7 @@ glm::vec3 TrackModel::vertexNormal(const std::vector<glm::vec3>& surface_normals
 }
 
 glm::vec4 TrackModel::colorAt(float x) const {
+	x *= 4.0;
 	return glm::vec4(
 		std::pow(std::sin((x + 0) * glm::pi<float>() + 0 / 3.0 * glm::pi<float>()), 2),
 		std::pow(std::sin((x + 1) * glm::pi<float>() + 1 / 3.0 * glm::pi<float>()), 2),

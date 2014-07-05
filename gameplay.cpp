@@ -57,7 +57,7 @@ void Gameplay::update(double s) {
 
 glm::mat4 Gameplay::setupCamera() const {
 	const float dir = _racer->getDirection();
-	const float camera_distance = 50.0f;
+	const float camera_distance = 90.0f;
 
 	const glm::vec3 camera_position(
 		_racer->getPosition() +
