@@ -88,7 +88,12 @@ float TrackInfo::distanceNear(float distance, glm::vec3 position) const {
 	float a_dist = glm::distance(position, a);
 	float b_dist = glm::distance(position, b);
 
+	Logger(120) << "a_dist: " << a_dist;
+	Logger(122) << "b_dist: " << b_dist;
+
 	float into = a_dist / (a_dist + b_dist);
+
+	Logger(123) << "Into: " << into;
 
 	return current_segment.distance + current_segment.distance_to_next * into;
 }
