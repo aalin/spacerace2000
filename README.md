@@ -7,7 +7,7 @@ A game set in some kind of space world.
 ### Graphics
 
 * Some kind of sky.
-* Framebuffers.
+* Framebuffers (we need multisampling!!!)
 * Depth of field.
 
 ### Random
