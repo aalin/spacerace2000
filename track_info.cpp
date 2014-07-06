@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "track_loader.hpp"
+#include "logger.hpp"
 
 const unsigned int DETAIL = 10;
 const float GENEROSITY = 30.0; // How far outside the track the player can be without being "off track"
@@ -38,6 +39,7 @@ TrackInfo::TrackInfo(const std::vector<glm::vec3>& key_points, float width) : _w
 	}
 }
 
+
 glm::vec3 TrackInfo::positionAt(float distance) const {
 	while(distance > _length)
 		distance -= _length;
@@ -49,6 +51,9 @@ glm::vec3 TrackInfo::positionAt(float distance) const {
 
 	float into = std::fabs(distance - current_point.distance);
 	float t = into / current_point.distance_to_next;
+
+	Logger(44) << "Distance: " << distance;
+	Logger(48) << "T: " << t;
 
 	return glm::mix(current_point.center, next_point.center, t);
 }
