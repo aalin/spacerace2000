@@ -8,11 +8,11 @@ class TrackInfo {
 	class PointInfo {
 		public:
 			unsigned int index;
-			glm::vec3 center;
 			float distance;
 			float distance_to_next;
 			float angle;
 
+			glm::vec3 center;
 			glm::vec3 left0;
 			glm::vec3 right0;
 			glm::vec3 left1;

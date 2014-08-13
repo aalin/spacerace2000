@@ -1,6 +1,7 @@
 #include "track_loader.hpp"
 #include "splines.hpp"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/vector_angle.hpp>
 #include <iostream>
 
 TrackLoader::TrackLoader(std::vector<glm::vec3> key_points, unsigned int detail, float width, float height)
@@ -17,16 +18,10 @@ float magnitude(const glm::vec2 v) {
 }
 
 float calculateDegrees(const glm::vec3 prev, const glm::vec3 curr, const glm::vec3 next) {
-	const glm::vec3 f_1 = next - curr;
-	const glm::vec3 f_2 = curr - prev;
+	const glm::vec3 f_1 = glm::normalize(next - curr);
+	const glm::vec3 f_2 = glm::normalize(curr - prev);
 
-	double scalarprod = glm::dot(f_1, f_2);
-	double abs_f1 = glm::length(f_1);
-	double abs_f2 = glm::length(f_2);
-	double cos_alpha = scalarprod/(abs_f1*abs_f2);
-	double alpha = std::acos(cos_alpha);
-
-	return glm::degrees(alpha);
+	return glm::angle(f_1, f_2);
 }
 
 TrackLoader::SectionRect TrackLoader::generateSectionRect(unsigned int i) const {
