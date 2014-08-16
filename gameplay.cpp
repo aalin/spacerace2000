@@ -53,20 +53,21 @@ void Gameplay::pause() {
 
 void Gameplay::update(double s) {
 	_racer->update(s, *_track);
+	updateCameraPosition();
 }
 
-glm::mat4 Gameplay::setupCamera() const {
+void Gameplay::updateCameraPosition() {
 	const float dir = _racer->getDirection();
 	const float camera_distance = 90.0f;
 
-	const glm::vec3 camera_position(
-		_racer->getPosition() +
+	_camera_position = _racer->getPosition() +
 		glm::rotateZ(glm::vec3(1.0, 1.0, 0.0), dir - 45.0f) * camera_distance +
-		glm::vec3(0.0, 0.0, 3.0)
-	);
+		glm::vec3(0.0, 0.0, 3.0);
+}
 
+glm::mat4 Gameplay::setupCamera() const {
 	return glm::lookAt(
-		camera_position,
+		_camera_position,
 		_racer->getPosition(),
 		glm::vec3(0.0, 0.0, 1.0)
 	);

@@ -46,9 +46,12 @@ class Gameplay : public GameState {
 
 		void changeModelMatrix(std::function<void(ChangeModelMatrix&)>);
 
+		void updateCameraPosition();
+
 		glm::mat4 _projection_matrix;
 		glm::mat4 _view_matrix;
 		glm::mat4 _model_matrix;
+		glm::vec3 _camera_position;
 };
 
 #endif
