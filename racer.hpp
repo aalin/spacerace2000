@@ -18,6 +18,7 @@ class Racer {
 		void setDirection(float direction) { _direction = direction; }
 		float getDirection() const { return _direction; }
 		float getTurnRatio() const { return _turning / TURN_LIMIT; }
+		float getDistance() const  { return _distance; }
 
 	private:
 		RacerModel _model;

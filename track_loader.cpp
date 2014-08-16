@@ -28,6 +28,7 @@ TrackLoader::SectionRect TrackLoader::generateSectionRect(unsigned int i, float 
 	const glm::vec3 forward(glm::normalize(delta));
 
 	const float scale_factor = 10.0;
+	angle = 0.0;
 	glm::mat4 rotation = glm::rotate(glm::mat4(1.0), angle * scale_factor, forward);
 
 	glm::vec3 outwards = glm::normalize(glm::vec3(delta.y, -delta.x, 0));

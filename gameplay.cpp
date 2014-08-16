@@ -63,6 +63,10 @@ void Gameplay::updateCameraPosition() {
 	_camera_position = _racer->getPosition() +
 		glm::rotateZ(glm::vec3(1.0, 1.0, 0.0), dir - 45.0f) * camera_distance +
 		glm::vec3(0.0, 0.0, 3.0);
+
+	float track_distance = _track->distanceNear(_racer->getDistance(), _camera_position);
+
+	_camera_position.z = _track->positionAt(track_distance).z + 20.0;
 }
 
 glm::mat4 Gameplay::setupCamera() const {
