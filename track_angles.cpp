@@ -16,6 +16,21 @@ float calculateAngle(const glm::vec3 prev, const glm::vec3 curr, const glm::vec3
 	return -glm::angle(f_1, f_2);
 }
 
+float TrackAngles::calculateSmoothAngle(int i) const {
+	const int radius = 5;
+
+	float total = 0.0;
+
+	const float PI = 3.14159265358979;
+
+	for(int x = -radius; x < radius; x++) {
+		float f = x * 1.0 / radius;
+		total += angleAt(i) * ((std::cos(f * PI) + 1.0) / 2.0);
+	}
+
+	return total;
+}
+
 TrackAngles::TrackAngles(const std::vector<glm::vec3>& points)
 {
 	for(unsigned int i = 0; i < points.size(); i++) {
@@ -25,8 +40,8 @@ TrackAngles::TrackAngles(const std::vector<glm::vec3>& points)
 
 		_angles.push_back(calculateAngle(prev, curr, next));
 	}
-}
 
-float TrackAngles::smoothAngleAt(int i) const {
-	return angleAt(i);
+	for(unsigned int i = 0; i < points.size(); i++) {
+		_smooth_angles.push_back(calculateSmoothAngle(i));
+	}
 }

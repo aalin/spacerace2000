@@ -9,21 +9,26 @@ class TrackAngles {
 		TrackAngles(const std::vector<glm::vec3>& _points);
 
 		float angleAt(int i) const {
-			while(i < 0)
-				i += _angles.size();
-
-			float angle = _angles.at(i % _angles.size());
-
-			// if(angle < 30.0) return -30.0;
-			// if(angle > 30.0) return 30.0;
-
-			return angle;
+			return loopAccess(_angles, i);
 		}
 
-		float smoothAngleAt(int i) const;
+		float smoothAngleAt(int i) const {
+			return loopAccess(_smooth_angles, i);
+		}
 
 	private:
 		std::vector<float> _angles;
+		std::vector<float> _smooth_angles;
+
+		float calculateSmoothAngle(int i) const;
+
+		template<typename T>
+		T loopAccess(const std::vector<T> v, signed int i) const {
+			while(i < 0)
+				i += v.size();
+
+			return v.at(i % v.size());
+		}
 };
 
 #endif
