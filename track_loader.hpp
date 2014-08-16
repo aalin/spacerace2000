@@ -34,9 +34,10 @@ class TrackLoader {
 		const float _height;
 
 		std::vector<glm::vec3> _points;
+		std::vector<float> _angles;
 		std::vector<SectionRect> _section_rects;
 
-		SectionRect generateSectionRect(unsigned int i) const;
+		SectionRect generateSectionRect(unsigned int i, float angle) const;
 };
 
 #endif

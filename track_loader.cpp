@@ -1,30 +1,25 @@
 #include "track_loader.hpp"
 #include "splines.hpp"
+#include "track_angles.hpp"
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/vector_angle.hpp>
 #include <iostream>
 
 TrackLoader::TrackLoader(std::vector<glm::vec3> key_points, unsigned int detail, float width, float height)
 	: _width(width), _height(height) {
 	_points = Splines(key_points).generate(detail);
 
+	TrackAngles track_angles(_points);
+
 	std::cout << "Number of points: " << _points.size() << std::endl;
 	for(unsigned int i = 0; i < _points.size(); i++)
-		_section_rects.push_back(generateSectionRect(i));
+		_section_rects.push_back(generateSectionRect(i, track_angles.smoothAngleAt(i)));
 }
 
 float magnitude(const glm::vec2 v) {
 	return std::sqrt(v.x * v.x + v.y * v.y);
 }
 
-float calculateDegrees(const glm::vec3 prev, const glm::vec3 curr, const glm::vec3 next) {
-	const glm::vec3 f_1 = glm::normalize(next - curr);
-	const glm::vec3 f_2 = glm::normalize(curr - prev);
-
-	return glm::angle(f_1, f_2);
-}
-
-TrackLoader::SectionRect TrackLoader::generateSectionRect(unsigned int i) const {
+TrackLoader::SectionRect TrackLoader::generateSectionRect(unsigned int i, float angle) const {
 	const glm::vec3 current(getPoint(i));;
 	const glm::vec3 next(getPoint(i + 1));
 	const glm::vec3 prev(getPoint(i - 1));
@@ -40,11 +35,9 @@ TrackLoader::SectionRect TrackLoader::generateSectionRect(unsigned int i) const 
 	glm::vec4 bottom_left(top_left - height);
 	glm::vec4 bottom_right(top_right - height);
 
-	float degrees = calculateDegrees(prev, current, next);
-
 	glm::mat4 translation = glm::translate(glm::mat4(1.0), current);
-	float scale_factor = -12.0;
-	glm::mat4 rotation = glm::rotate(glm::mat4(1.0), degrees * scale_factor, forward);
+	const float scale_factor = 20.0;
+	glm::mat4 rotation = glm::rotate(glm::mat4(1.0), angle * scale_factor, forward);
 
 	glm::mat4 final = translation * rotation;
 

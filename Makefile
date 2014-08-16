@@ -1,4 +1,4 @@
-FILES = main game game_state gameplay framebuffer shader opengl splines track track_model racer racer_model track_info vertex_array track_loader menu screen_renderer logger
+FILES = main game game_state gameplay framebuffer shader opengl splines track track_model racer racer_model track_info vertex_array track_loader menu screen_renderer logger track_angles
 OBJS = $(addsuffix .o, $(FILES))
 
 CC=clang

@@ -4,7 +4,7 @@
 
 #include <glm/gtc/constants.hpp>
 
-const unsigned int DETAIL = 20;
+const unsigned int DETAIL = 30;
 
 TrackModel::TrackModel(std::vector<glm::vec3> key_points, float width, float height) {
 	_vertex_array = new VertexArray(
@@ -42,9 +42,11 @@ std::vector<Vertex> TrackModel::generateVertices(const TrackLoader& track_loader
 		TrackLoader::SectionRect current = track_loader.getSectionRect(i);
 		TrackLoader::SectionRect next = track_loader.getSectionRect(i + 1);
 
+
 		glm::vec4 color0 = colorAt(i / static_cast<float>(track_loader.numSectionRects()));
-		//glm::vec4 color1 = colorAt((i + 1) / static_cast<float>(track_loader.numSectionRects()));
-		glm::vec4 color1 = color0;
+		glm::vec4 color1 = colorAt((i + 1) / static_cast<float>(track_loader.numSectionRects()));
+		// glm::vec4 color1 = color0;
+
 
 		// Top
 		glm::vec3 top_normal0 = vertexNormal(top_surface_normals, i);
