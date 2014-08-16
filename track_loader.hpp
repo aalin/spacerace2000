@@ -11,6 +11,7 @@ class TrackLoader {
 			glm::vec3 top_right;
 			glm::vec3 bottom_left;
 			glm::vec3 bottom_right;
+			float angle;
 		};
 
 		TrackLoader(std::vector<glm::vec3> key_points, unsigned int detail, float width, float height);

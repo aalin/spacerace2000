@@ -13,7 +13,15 @@ float calculateAngle(const glm::vec3 prev, const glm::vec3 curr, const glm::vec3
 	const glm::vec2 f_1 = glm::normalize(glm::vec2(next - curr));
 	const glm::vec2 f_2 = glm::normalize(glm::vec2(curr - prev));
 
-	return -glm::angle(f_1, f_2);
+	float angle = -glm::angle(f_1, f_2);
+
+	const float threshold = 1.0;
+
+	if(angle < -threshold)
+		return -threshold;
+	if(angle > threshold)
+		return threshold;
+	return angle;
 }
 
 float TrackAngles::calculateSmoothAngle(int i) const {

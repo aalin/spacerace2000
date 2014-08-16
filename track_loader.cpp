@@ -27,7 +27,11 @@ TrackLoader::SectionRect TrackLoader::generateSectionRect(unsigned int i, float 
 	const glm::vec3 delta(current - next);
 	const glm::vec3 forward(glm::normalize(delta));
 
-	const glm::vec3 outwards(glm::normalize(glm::vec3(delta.y, -delta.x, 0)));
+	const float scale_factor = 10.0;
+	glm::mat4 rotation = glm::rotate(glm::mat4(1.0), angle * scale_factor, forward);
+
+	glm::vec3 outwards = glm::normalize(glm::vec3(delta.y, -delta.x, 0));
+	outwards = glm::vec3(rotation * glm::vec4(outwards, 0.0));
 	const glm::vec4 height(0.0, 0.0, _height, 0.0);
 
 	glm::vec4 top_left(outwards * -_width, 1.0);
@@ -36,15 +40,14 @@ TrackLoader::SectionRect TrackLoader::generateSectionRect(unsigned int i, float 
 	glm::vec4 bottom_right(top_right - height);
 
 	glm::mat4 translation = glm::translate(glm::mat4(1.0), current);
-	const float scale_factor = 20.0;
-	glm::mat4 rotation = glm::rotate(glm::mat4(1.0), angle * scale_factor, forward);
 
-	glm::mat4 final = translation * rotation;
+	glm::mat4 final = translation; // * rotation;
 
 	return SectionRect{
 		glm::vec3(final * top_left),
 		glm::vec3(final * top_right),
 		glm::vec3(final * bottom_left),
-		glm::vec3(final * bottom_right)
+		glm::vec3(final * bottom_right),
+		angle
 	};
 }

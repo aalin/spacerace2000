@@ -26,7 +26,7 @@ TrackInfo::TrackInfo(const std::vector<glm::vec3>& key_points, float width) : _w
 		point_info.center = p0;
 		point_info.distance = _length;
 		point_info.distance_to_next = glm::distance(p0, p1);
-		point_info.angle = 0.0; // TODO: fix this
+		point_info.angle = current.angle;
 
 		point_info.left0 = current.top_left;
 		point_info.right0 = current.top_right;
