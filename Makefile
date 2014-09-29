@@ -12,7 +12,8 @@ else
 endif
 
 %.o: %.cpp %.hpp
-	$(CC) -c $(CFLAGS) $< -o $@
+	@echo "Compiling $< => $@"
+	@$(CC) -c $(CFLAGS) $< -o $@
 
 all: game
 
@@ -22,10 +23,18 @@ run: game
 test: game
 	./game test
 
+info:
+	@echo "CC: $(CC)"
+	@echo "LFLAGS: $(LFLAGS)"
+	@echo "CFLAGS: $(CFLAGS)"
+	@echo
+
 game: $(OBJS)
-	$(CC) $(OBJS) $(LFLAGS) -o game
+	@echo
+	@echo "Linking $(OBJS) => game"
+	@$(CC) $(OBJS) $(LFLAGS) -o game
 
 clean:
 	rm -f *.o game
 
-.PHONY: all demo clean
+.PHONY: info all demo clean
