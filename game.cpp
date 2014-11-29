@@ -58,10 +58,13 @@ void Game::run() {
 	while(_running) {
 		double current_time = glfwGetTime();
 
+		double s = current_time - last_time * _game_speed;
+
 		if(_paused)
-			update(0.0);
-		else
-			update((current_time - last_time) * _game_speed);
+			s = 0.0;
+
+		update(s);
+
 		draw();
 
 		last_time = current_time;
