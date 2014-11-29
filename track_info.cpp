@@ -39,6 +39,14 @@ TrackInfo::TrackInfo(const std::vector<glm::vec3>& key_points, float width) : _w
 	}
 }
 
+glm::vec3 TrackInfo::betterPositionAt(float distance, glm::vec3 position) const {
+	std::vector<PointInfo> point_infos_around_position(pointInfosAroundPosition(position, distance));
+
+	if(point_infos_around_position.empty())
+		return glm::vec3(position.x, position.y, 0.0);
+	else
+		return glm::vec3(position.x, position.y, point_infos_around_position.front().heightAt(position));
+}
 
 glm::vec3 TrackInfo::positionAt(float distance) const {
 	while(distance > _length)
@@ -58,7 +66,7 @@ glm::vec3 TrackInfo::positionAt(float distance) const {
 	return glm::mix(current_point.center, next_point.center, t);
 }
 
-float TrackInfo::distanceNear(float distance, glm::vec3 position) const {
+std::vector<TrackInfo::PointInfo> TrackInfo::pointInfosAroundPosition(glm::vec3 position, float distance) const {
 	while(distance > _length)
 		distance -= _length;
 
@@ -69,9 +77,6 @@ float TrackInfo::distanceNear(float distance, glm::vec3 position) const {
 			point_infos_around_position.push_back(*it);
 	}
 
-	if(point_infos_around_position.empty())
-		return distance;
-
 	std::sort(
 		point_infos_around_position.begin(),
 		point_infos_around_position.end(),
@@ -79,6 +84,15 @@ float TrackInfo::distanceNear(float distance, glm::vec3 position) const {
 			return std::fabs(a.distance - distance) < std::fabs(b.distance - distance);
 		}
 	);
+
+	return point_infos_around_position;
+}
+
+float TrackInfo::distanceNear(float distance, glm::vec3 position) const {
+	std::vector<PointInfo> point_infos_around_position(pointInfosAroundPosition(position, distance));
+
+	if(point_infos_around_position.empty())
+		return distance;
 
 	const PointInfo& current_segment = point_infos_around_position[0];
 

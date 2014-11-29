@@ -42,10 +42,11 @@ void Racer::update(double s, const Track& track) {
 	_distance = track.distanceNear(_distance, _position);
 	Logger(169) << _distance;
 	glm::vec3 track_position = track.positionAt(_distance);
+	//glm::vec3 track_position = track.betterPositionAt(_distance, _position);
 
 	_position += glm::rotateZ(glm::vec3(1.0, 1.0, 0.0), _direction + 90.0f + 45.0f) * _speed * static_cast<float>(s);
 	std::cout << track_position.z << std::endl;
-	_position.z = track_position.z + 2.0;
+	_position.z = track_position.z;
 }
 
 void Racer::draw() const {
