@@ -1,6 +1,10 @@
 FILES = $(basename $(wildcard *.cpp))
 OBJS = $(addsuffix .o, $(FILES))
 
+GREEN = "\\033[32m"
+YELLOW = "\\033[33m"
+RESET = "\\033[0m"
+
 CC=clang
 CFLAGS=-Wall -Wextra -ggdb -std=c++11 -stdlib=libc++
 
@@ -12,7 +16,7 @@ else
 endif
 
 %.o: %.cpp %.hpp
-	@echo "Compiling $< => $@"
+	@echo "$(YELLOW)Compiling $< => $@$(RESET)"
 	@$(CC) -c $(CFLAGS) $< -o $@
 
 all: game
@@ -31,7 +35,7 @@ info:
 
 game: $(OBJS)
 	@echo
-	@echo "Linking $(OBJS) => game"
+	@echo "$(GREEN)Linking $(OBJS) => game$(RESET)"
 	@$(CC) $(OBJS) $(LFLAGS) -o game
 
 clean:
